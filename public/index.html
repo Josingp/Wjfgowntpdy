@@ -10,6 +10,7 @@
 html,body{height:100%}
 body{font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic","맑은 고딕",sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5;overflow:hidden}
 a{color:inherit;text-decoration:none;cursor:pointer}
+ul,li{list-style:none}
 button{font:inherit;cursor:pointer;border:0;background:none}
 .view{display:none;height:100vh;flex-direction:column}
 .view.on{display:flex}
@@ -28,7 +29,7 @@ button{font:inherit;cursor:pointer;border:0;background:none}
 .body{flex:1;overflow:auto;padding:24px 32px}
 /* main grid */
 .grid{display:grid;grid-template-columns:1.15fr 1fr 1fr;grid-template-rows:auto auto;gap:18px;max-width:1400px;margin:0 auto}
-.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:16px 20px}
 .card h3{font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
 .card h3 a{font-size:12px;color:var(--mute);font-weight:500}
 .notice li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f4;font-size:13px}
@@ -43,7 +44,7 @@ button{font:inherit;cursor:pointer;border:0;background:none}
 .sched li{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid #f0f0f4;font-size:13px}
 .sched li:last-child{border:0}
 .sched .tm{width:44px;color:var(--p);font-weight:700;font-variant-numeric:tabular-nums}
-.welcome{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(110deg,#2b2649 0%,#5f52b7 55%,#7ea3e2 100%);color:#fff;border-radius:10px;padding:20px 26px;min-height:104px}
+.welcome{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(110deg,#2b2649 0%,#5f52b7 55%,#7ea3e2 100%);color:#fff;border-radius:10px;padding:20px 26px;min-height:92px}
 .welcome b{font-size:20px;font-weight:700;display:block;margin-bottom:4px}
 .welcome small{opacity:.8;font-size:13px}
 .welcome .wx{text-align:right;font-size:13px;opacity:.9}
@@ -148,8 +149,8 @@ button{font:inherit;cursor:pointer;border:0;background:none}
 .hint{position:fixed;left:12px;bottom:12px;background:rgba(20,18,40,.9);color:#fff;font-size:12px;padding:10px 14px;border-radius:8px;z-index:99;display:none;line-height:1.9;font-family:ui-monospace,monospace}
 .hint.on{display:block}
 .hint kbd{background:#fff;color:#222;padding:0 6px;border-radius:3px;font-weight:700;margin-right:6px}
-.screens{display:flex;gap:6px;align-items:center;padding:10px 18px;border-bottom:1px solid var(--line);flex:none;font-size:12px;color:var(--mute)}
-.screens .btn{padding:7px 10px;font-size:12.5px}
+.screens{display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:10px 18px;border-bottom:1px solid var(--line);flex:none;font-size:12px;color:var(--mute)}
+.screens .btn{padding:7px 10px;font-size:12.5px;white-space:nowrap}
 /* ===== LAST FANTASIA 전적검색 ===== */
 .lf{background:#0e1017;color:#dfe3ee;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
 .lf .lhd{height:52px;background:#171a26;border-bottom:1px solid #262a3a;display:flex;align-items:center;padding:0 28px;gap:4px;flex:none}
@@ -237,6 +238,95 @@ button{font:inherit;cursor:pointer;border:0;background:none}
 .lf .searching.on{display:flex}
 .lf .searching .sp{width:34px;height:34px;border:3px solid #22263a;border-top-color:#3d63ff;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== 검색엔진 NEXO ===== */
+.se{background:#fff;color:#202124;font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.se .sehome{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding-bottom:10vh;position:relative}
+.se .selogo{font-size:64px;font-weight:900;letter-spacing:-.04em;margin-bottom:26px;line-height:1}
+.se .selogo b{color:#2b6cff}.se .selogo i{font-style:normal;color:#ff5e3a}.se .selogo u{text-decoration:none;color:#22b573}.se .selogo s{text-decoration:none;color:#f5b400}
+.se .selogo.sm{font-size:26px;margin:0 22px 0 0}
+.se .sebox{width:640px;max-width:90%;height:52px;border:1px solid #dfe1e5;border-radius:26px;display:flex;align-items:center;padding:0 18px;gap:12px;box-shadow:0 1px 6px rgba(32,33,36,.16);background:#fff}
+.se .sebox input{flex:1;border:0;outline:none;font:inherit;font-size:16.5px;color:#202124}
+.se .sebox .ic{color:#9aa0a6;font-size:17px}
+.se .sebox button{color:#2b6cff;font-weight:700;font-size:14px}
+.se .sebtns{display:flex;gap:10px;margin-top:22px}
+.se .sebtns span{background:#f8f9fa;border:1px solid #f8f9fa;border-radius:4px;padding:9px 16px;font-size:13.5px;color:#3c4043}
+.se .setrend{position:absolute;bottom:26px;display:flex;gap:18px;font-size:12.5px;color:#70757a}
+.se .setrend b{color:#3c4043;font-weight:600}
+.se .sefoot{background:#f2f2f2;color:#70757a;font-size:12.5px;padding:12px 30px;display:flex;gap:20px;flex:none}
+.se .sefoot span:first-child{margin-right:auto}
+/* results */
+.se .sehd{border-bottom:1px solid #ebebeb;padding:14px 30px 0;flex:none}
+.se .sehd .row{display:flex;align-items:center;gap:0}
+.se .sehd .sebox{height:44px;width:600px;box-shadow:none;border-color:#dfe1e5}
+.se .sehd .me{margin-left:auto;display:flex;align-items:center;gap:14px;font-size:13px;color:#5f6368}
+.se .sehd .me .av{width:30px;height:30px;border-radius:50%;background:#2b6cff;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+.se .setabs{display:flex;gap:2px;margin-top:12px;margin-left:120px}
+.se .setabs a{padding:8px 12px;font-size:13.5px;color:#5f6368;border-bottom:3px solid transparent}
+.se .setabs a.cur{color:#2b6cff;border-color:#2b6cff;font-weight:700}
+.se .sebody{flex:1;overflow:auto;padding:18px 30px 40px 150px}
+.se .secnt{font-size:12.5px;color:#70757a;margin-bottom:16px}
+.se .segrid{display:grid;grid-template-columns:660px 340px;gap:40px;align-items:start}
+/* profile card */
+.se .prof{border:1px solid #e3e5e8;border-radius:12px;padding:20px 22px 14px;margin-bottom:26px}
+.se .prof .top{display:flex;justify-content:space-between;align-items:flex-start}
+.se .prof h2{font-size:20px;font-weight:800}
+.se .prof .cat{font-size:13px;color:#70757a;margin-top:2px}
+.se .prof .dots{color:#9aa0a6;font-size:20px;line-height:1}
+.se .prof .ptab{display:flex;gap:6px;margin:14px 0 16px}
+.se .prof .ptab span{border:1px solid #dfe1e5;border-radius:20px;padding:6px 14px;font-size:13px;color:#3c4043}
+.se .prof .ptab span.cur{background:#2b6cff;color:#fff;border-color:#2b6cff;font-weight:700}
+.se .prof .pbox{display:flex;gap:18px;border-top:1px solid #f1f3f4;padding-top:16px}
+.se .prof table{flex:1;border-collapse:collapse;font-size:14px}
+.se .prof th{width:64px;text-align:left;color:#70757a;font-weight:500;vertical-align:top;padding:4px 0 6px;font-size:13.5px}
+.se .prof td{padding:4px 0 6px;color:#202124;line-height:1.55}
+.se .prof td a{color:#1a5fd6}
+.se .prof td .ln{display:block}
+.se .prof .photo{width:120px;height:150px;border-radius:8px;object-fit:cover;background:#eef0f3;flex:none;border:1px solid #e3e5e8}
+.se .prof .own{font-size:12px;color:#70757a;margin-top:14px;padding-top:12px;border-top:1px solid #f1f3f4;line-height:1.7}
+.se .prof .own a{color:#5f6368;text-decoration:underline;margin-right:8px}
+/* related */
+.se .rel h3,.se .sec h3{font-size:16px;font-weight:700;margin-bottom:10px}
+.se .rel{margin-bottom:26px}
+.se .rel .chips{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.se .rel .chips span{background:#f1f3f4;border-radius:22px;padding:9px 14px 9px 12px;font-size:13.5px;color:#202124;display:flex;align-items:center;gap:8px}
+.se .rel .chips span::before{content:"🔍";font-size:11px;opacity:.6}
+/* news */
+.se .sec{margin-bottom:28px}
+.se .sec h3 small{font-size:12.5px;color:#70757a;font-weight:400;margin-left:8px}
+.se .news li{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #f1f3f4}
+.se .news li:last-child{border:0}
+.se .news .th{width:110px;height:76px;border-radius:6px;flex:none;background:linear-gradient(135deg,#dfe4ee,#c6cedc);display:flex;align-items:center;justify-content:center;color:#8a93a3;font-size:11px;font-weight:700;letter-spacing:.05em}
+.se .news .th.a{background:linear-gradient(135deg,#2b2649,#5f52b7)} .se .news .th.b{background:linear-gradient(135deg,#1c2340,#3d63ff)} .se .news .th.c{background:linear-gradient(135deg,#3a2a17,#e8b33a)} .se .news .th.d{background:linear-gradient(135deg,#173a2a,#4ad38a)}
+.se .news .th.a,.se .news .th.b,.se .news .th.c,.se .news .th.d{color:rgba(255,255,255,.75)}
+.se .news .src{font-size:12.5px;color:#70757a;margin-bottom:3px}.se .news .src b{color:#202124;font-weight:600;margin-right:6px}
+.se .news .t{font-size:16px;color:#1a0dab;line-height:1.4;font-weight:500}
+.se .news .s{font-size:13px;color:#4d5156;margin-top:3px;line-height:1.5}
+.se .more{font-size:13.5px;color:#1a5fd6;margin-top:8px;display:inline-block}
+/* web */
+.se .web li{padding:10px 0 14px}
+.se .web .src{display:flex;align-items:center;gap:8px;font-size:12.5px;color:#4d5156}
+.se .web .src i{width:22px;height:22px;border-radius:50%;background:#e8eaed;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:11px;font-weight:800;color:#5f6368}
+.se .web .src small{color:#70757a}
+.se .web .t{font-size:18px;color:#1a0dab;margin-top:4px;line-height:1.35}
+.se .web .s{font-size:13.5px;color:#4d5156;line-height:1.55;margin-top:3px}
+.se .pg{display:flex;gap:14px;justify-content:center;margin-top:24px;font-size:14px;color:#1a5fd6}
+.se .pg b{color:#202124;font-size:32px;letter-spacing:.2em;font-weight:900;margin-right:6px}
+.se .pg b i{font-style:normal}
+/* side */
+.se .side .box{border:1px solid #e3e5e8;border-radius:12px;padding:16px 18px;margin-bottom:16px}
+.se .side h4{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between}
+.se .side h4 span{font-size:11.5px;color:#70757a;font-weight:400}
+.se .side li{display:flex;gap:10px;align-items:center;padding:6px 0;font-size:13.5px}
+.se .side .rk{width:16px;color:#2b6cff;font-weight:800;font-size:13px}
+.se .side .ppl{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.se .side .ppl div{text-align:center;font-size:12px;color:#3c4043}
+.se .side .ppl i{display:block;width:56px;height:56px;border-radius:50%;background:#e8eaed;margin:0 auto 5px}
+.se .side .ppl small{display:block;color:#70757a;font-size:11px}
+.se .side .up{color:#ff5e3a;font-size:11px;margin-left:auto}
+.se .side .nw{color:#2b6cff;font-size:11px;margin-left:auto;font-weight:700}
+.imgf{display:flex;gap:10px;align-items:center}.imgf img{width:48px;height:60px;object-fit:cover;border-radius:5px;border:1px solid var(--line);background:#f1f1f5}
+.imgf input{flex:1;font-size:12px}.imgf button{font-size:12px;color:var(--red)}
 
 /* settings */
 .cog{position:fixed;right:16px;top:70px;width:34px;height:34px;border-radius:50%;background:transparent;border:0;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:70;font-size:18px;color:#999;opacity:.15;transition:.2s}
@@ -474,6 +564,60 @@ button{font:inherit;cursor:pointer;border:0;background:none}
 </div>
 </section>
 
+<!-- ===== 검색엔진: HOME ===== -->
+<section class="view se" id="v-se">
+<div class="sehome">
+ <div class="selogo"><b>N</b><i>E</i><u>X</u><s>O</s></div>
+ <div class="sebox"><span class="ic">🔍</span><input id="se-q" placeholder="검색어를 입력하세요" autocomplete="off" onkeydown="if(event.key==='Enter')seSearch()"><button onclick="seSearch()">검색</button></div>
+ <div class="sebtns"><span>NEXO 검색</span><span>오늘의 뉴스</span></div>
+ <div class="setrend"><b>실시간 급상승</b><span>1 라스트 판타지아 종료설</span><span>2 추석 연휴 교통</span><span>3 서울 날씨</span><span>4 루나소프트</span><span>5 넥소페이 오류</span></div>
+</div>
+<div class="sefoot"><span>대한민국</span><span>광고</span><span>비즈니스</span><span>검색 작동 방식</span><span>개인정보처리방침</span><span>약관</span><span>설정</span></div>
+</section>
+
+<!-- ===== 검색엔진: RESULTS ===== -->
+<section class="view se" id="v-sep">
+<div class="sehd">
+ <div class="row"><div class="selogo sm" onclick="go('se')"><b>N</b><i>E</i><u>X</u><s>O</s></div>
+  <div class="sebox"><input id="se-q2" autocomplete="off" onkeydown="if(event.key==='Enter'){$('se-q').value=this.value;seSearch()}"><span class="ic">✕</span><span class="ic">🔍</span></div>
+  <div class="me"><span>이미지</span><span>지도</span><span>메일</span><span class="av">현</span></div></div>
+ <div class="setabs"><a class="cur">전체</a><a>뉴스</a><a>이미지</a><a>동영상</a><a>인물</a><a>블로그</a><a>카페</a><a>지식</a><a>더보기 ▾</a></div>
+</div>
+<div class="sebody">
+ <div class="secnt">검색결과 약 <span class="u-secnt"></span>건 (0.31초)</div>
+ <div class="segrid">
+  <div>
+   <div class="prof">
+    <div class="top"><div><h2 class="u-sename"></h2><div class="cat u-secat"></div></div><span class="dots">⋮</span></div>
+    <div class="ptab"><span class="cur">전체</span><span>프로필</span><span>경력</span><span>뉴스</span></div>
+    <div class="pbox">
+     <table>
+      <tr><th>소속</th><td><a class="u-seorg"></a></td></tr>
+      <tr><th>출생</th><td class="u-seborn"></td></tr>
+      <tr><th>학력</th><td class="u-seedu"></td></tr>
+      <tr><th>경력</th><td id="se-career"></td></tr>
+      <tr><th>주요<br>프로젝트</th><td class="u-seproj"></td></tr>
+      <tr><th>사이트</th><td><a class="u-sesite"></a></td></tr>
+     </table>
+     <img class="photo" id="se-photo" src="" alt="">
+    </div>
+    <div class="own">본인 또는 대리인이 직접 관리하는 정보입니다. 본인참여 <span class="u-seown"></span> ⓘ<br><a>인물정보 본인참여</a><a>직업별 등재기준</a><a>오류신고</a></div>
+   </div>
+   <div class="rel"><h3>연관 검색어</h3><div class="chips" id="se-rel"></div></div>
+   <div class="sec"><h3>뉴스<small>관련도순 · 최신순</small></h3><ul class="news" id="se-news"></ul><a class="more">뉴스 더보기 ›</a></div>
+   <div class="sec"><h3>웹문서</h3><ul class="web" id="se-web"></ul></div>
+   <div class="pg"><b><i style="color:#2b6cff">N</i><i style="color:#ff5e3a">E</i><i style="color:#22b573">X</i><i style="color:#f5b400">O</i><i style="color:#2b6cff">O</i><i style="color:#ff5e3a">O</i></b><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>다음 ›</span></div>
+  </div>
+  <div class="side">
+   <div class="box"><h4>함께 많이 찾는 인물</h4><div class="ppl"><div><i></i>박도훈<small>루나소프트 본부장</small></div><div><i></i>강민재<small>루나소프트 창업자</small></div><div><i></i>서지원<small>루나소프트 CFO</small></div></div></div>
+   <div class="box"><h4>인기 검색어 <span>실시간</span></h4><ul>
+    <li><span class="rk">1</span>라스트 판타지아 종료<span class="up">▲ 3</span></li><li><span class="rk">2</span>루나소프트 대표<span class="nw">NEW</span></li><li><span class="rk">3</span>추석 KTX 예매</li><li><span class="rk">4</span>라판 15주년<span class="up">▲ 1</span></li><li><span class="rk">5</span>넥소페이</li><li><span class="rk">6</span>서울 날씨</li></ul></div>
+   <div class="box"><h4>지식백과 <span>기업</span></h4><div style="font-size:13.5px;line-height:1.6;color:#3c4043"><b class="u-seco"></b><br>게임 개발 및 퍼블리싱 기업. 2011년 출시한 MMORPG 〈라스트 판타지아 온라인〉으로 성장했으며, 현재 라이브 서비스와 신규 IP 개발을 병행하고 있다.</div></div>
+  </div>
+ </div>
+</div>
+</section>
+
 <!-- ===== POPUP: 인사발령 ===== -->
 <div class="ov" id="ov" onclick="if(event.target===this)closePop()">
  <div class="pp">
@@ -504,7 +648,7 @@ button{font:inherit;cursor:pointer;border:0;background:none}
 <div class="cog" onclick="togglePanel()" title="설정 (S)">⚙</div>
 <aside class="panel" id="panel">
  <div class="panel-h"><b>촬영 설정</b><span>적용 = 이 PC에 임시 저장 · 셋업 저장 = 서버에 저장</span><button onclick="togglePanel()">×</button></div>
- <div class="screens"><span>화면</span><button class="btn gh" onclick="go('main')">사내 홈페이지</button><button class="btn gh" onclick="go('lf')">라판 전적검색</button><button class="btn gh" onclick="go('lfp')">검색 결과</button></div>
+ <div class="screens"><span>화면 전환</span><button class="btn gh" onclick="go('main')">사내 홈페이지</button><button class="btn gh" onclick="go('lf')">라판 검색</button><button class="btn gh" onclick="go('lfp')">라판 결과</button><button class="btn gh" onclick="go('se')">검색엔진</button><button class="btn gh" onclick="go('sep')">인물 결과</button></div>
  <div class="preset">
   <div class="ps-row"><select id="ps-sel" onchange="$('ps-name').value=this.value"><option value="">— 저장된 셋업 —</option></select><button class="btn gh" onclick="loadPreset()">불러오기</button><button class="btn gh" onclick="deletePreset()">삭제</button></div>
   <div class="ps-row"><input id="ps-name" placeholder="셋업 이름 (예: 씬12_현영아)"><button class="btn" onclick="savePreset()">이 이름으로 서버에 저장</button></div>
@@ -518,7 +662,7 @@ button{font:inherit;cursor:pointer;border:0;background:none}
 <kbd>F</kbd>글쓰기 화면 본문 자동 입력 &nbsp;<kbd>T</kbd>타이핑 연출로 입력<br>
 <kbd>Enter</kbd>글쓰기 화면에서 등록 &nbsp;<kbd>C</kbd>댓글·추천 폭주 시작<br>
 <kbd>P</kbd>인사발령 팝업 &nbsp;<kbd>M</kbd>메신저 알림 &nbsp;<kbd>R</kbd>초기화(글 삭제)<br>
-<kbd>1</kbd>메인 &nbsp;<kbd>2</kbd>익명게시판 &nbsp;<kbd>3</kbd>글쓰기 &nbsp;<kbd>Esc</kbd>팝업 닫기<br><kbd>4</kbd>라판 전적검색 홈 &nbsp;<kbd>5</kbd>검색 결과 (홈에서 F/T 입력 → Enter)<br><kbd>S</kbd>설정 메뉴 열기/닫기
+<kbd>1</kbd>메인 &nbsp;<kbd>2</kbd>익명게시판 &nbsp;<kbd>3</kbd>글쓰기 &nbsp;<kbd>Esc</kbd>팝업 닫기<br><kbd>4</kbd>라판 전적검색 홈 &nbsp;<kbd>5</kbd>검색 결과 (홈에서 F/T 입력 → Enter)<br><kbd>6</kbd>검색엔진 홈 &nbsp;<kbd>7</kbd>인물 검색 결과<br><kbd>S</kbd>설정 메뉴 열기/닫기
 </div>
 
 <script>
@@ -535,7 +679,13 @@ const DEF = {
  foot:"본 발령은 경영진 결정에 따른 것으로, 관련 문의는 인사팀(내선 2100)으로 연락 바랍니다.\n주식회사 루나소프트 대표이사",
  msgfrom:"인사팀 (공지)", msgh:"[긴급 인사발령]", msgb:"현영아 → LF 유저데이터 실사 TF\n직속: 대표이사 · 즉시 시행",
  lfnick:"tmdgur91", lftag:"#KR1", lfserver:"아르카디아", lfclass:"모험가 (초보자)", lflevel:"LV.1", lfcreated:"2011.05.24", lflast:"2011.05.24",
- lfdays:"1일", lfhours:"0시간 42분", lfguild:"없음", lfrank:"순위 없음", lfpower:"12", lfkills:"2", lfupdated:"방금 전", lfdelay:1.2
+ lfdays:"1일", lfhours:"0시간 42분", lfguild:"없음", lfrank:"순위 없음", lfpower:"12", lfkills:"2", lfupdated:"방금 전", lfdelay:1.2,
+ seq:"오승혁", sename:"오승혁", secat:"기업인", seborn:"1991년", seorg:"루나소프트 (대표이사)", seedu:"한국대학교 경영학과 학사",
+ secareer:"2023~ 루나소프트 대표이사\n2020~2023 루나소프트 사업전략본부장\n2017~2020 루나소프트 라이브사업팀 팀장\n2014~ 루나소프트 입사",
+ seproj:"라스트 판타지아 라이브 서비스 및 사업 운영", sesite:"루나소프트 공식 홈페이지", seown:"2026.03.14.", seco:"루나소프트 (Luna Soft)", secnt:"12,400", sedelay:0.5, sephoto:"",
+ serel:"오승혁 루나소프트\n오승혁 대표 나이\n루나소프트 대표이사\n라스트 판타지아 서비스 종료\n루나소프트 구조조정\n오승혁 인터뷰\n루나소프트 신작\n오승혁 학력",
+ senews:"게임포스트|오승혁 루나소프트 대표 \"라판 15년, 라이브 서비스 포트폴리오 전면 재검토\"|2시간 전|오승혁 루나소프트 대표이사가 11일 경영진 간담회에서 장기 라이브 서비스의 수익성 재검토를 공식화했다. 업계에서는 〈라스트 판타지아〉의 거취에 관심이 쏠리고 있다.\n테크타임즈|[인터뷰] 오승혁 대표 \"감정이 아니라 숫자로 결정한다\"…루나소프트의 다음 15년|1일 전|2023년 취임 이후 조직 개편과 신작 라인업 재정비를 주도해 온 오승혁 대표를 만났다. 그는 \"모든 서비스는 데이터로 평가받는다\"고 말했다.\n이코노미뷰|루나소프트, 2분기 영업이익 38% 감소…라이브 매출 하락이 원인|3일 전|루나소프트가 2분기 매출 412억원, 영업이익 27억원을 기록했다. 주력 IP 〈라스트 판타지아〉의 매출 감소가 실적 부진의 주요 원인으로 꼽힌다.\n플레이저널|\"서버가 아니라 왕국\"…라판 유저들, 루나소프트 앞 촛불 대신 편지 전달|5일 전|〈라스트 판타지아〉 이용자 모임이 루나소프트 본사에 서비스 유지를 요청하는 편지 1,200통을 전달했다. 회사 측은 \"검토 중인 사안은 없다\"고 답했다.",
+ seweb:"루나소프트|lunasoft.co.kr › company › ceo|CEO 인사말 - 루나소프트|안녕하십니까, 루나소프트 대표이사 오승혁입니다. 루나소프트는 2011년 〈라스트 판타지아 온라인〉으로 시작해 지금까지 수백만 명의 이용자와 함께 성장해 왔습니다.\n잡리뷰|jobreview.kr › company › 루나소프트|루나소프트 기업리뷰 - \"대표 바뀌고 분위기 확 달라짐\" 외 214건|평점 2.9 · 복지 3.4 · 경영진 2.1. \"수치 중심 경영이라 목표는 명확한데 사람이 남질 않는다\" \"라이브팀은 항상 살얼음판\"\n라판 갤러리|lfgall.com › board › view › 8823471|[정리] 오승혁 대표 간담회 발언 전문 + 해석 (스압)|오늘 사내 간담회 내용 유출된 거 정리함. \"모든 서비스는 데이터로 평가\" → 라판 종료 밑작업이라는 게 중론. 댓글 1,847\n위키트리아|wikitria.org › wiki › 오승혁|오승혁 - 위키트리아|오승혁(吳承赫, 1991년 ~ )은 대한민국의 기업인이다. 2014년 루나소프트에 입사하여 2023년부터 대표이사를 맡고 있다."
 };
 const FIELDS = [
  ["주인공 / 기본 정보"],
@@ -552,6 +702,10 @@ const FIELDS = [
  ["lfnick","검색할 캐릭터명 (F/T 자동 입력값)"],["lftag","캐릭터명 옆 태그"],["lfserver","서버"],["lfclass","직업"],["lflevel","레벨"],["lfcreated","계정 생성일"],
  ["lflast","마지막 접속"],["lfdays","누적 접속 일수"],["lfhours","총 플레이 시간"],["lfguild","길드"],["lfrank","서버 랭킹"],["lfpower","전투력"],["lfkills","처치 몬스터"],["lfupdated","마지막 갱신"],
  ["lfdelay","검색 후 결과까지 (초)","num"],
+ ["검색엔진 (오승혁 인물정보)"],
+ ["sephoto","인물 사진 (업로드)","img"],["seq","검색어 (F/T 자동 입력값)"],["sename","이름"],["secat","분류"],["seborn","출생"],["seorg","소속"],["seedu","학력"],
+ ["secareer","경력 (한 줄에 하나)","ta"],["seproj","주요 프로젝트"],["sesite","사이트"],["seown","본인참여 일자"],["seco","지식백과 기업명"],["secnt","검색결과 건수"],["sedelay","검색 후 결과까지 (초)","num"],
+ ["serel","연관 검색어 (한 줄에 하나)","ta"],["senews","뉴스 (매체|제목|시간|요약)","ta"],["seweb","웹문서 (출처|주소|제목|요약)","ta"],
 ];
 let cfg = Object.assign({}, DEF);
 try{ const s=localStorage.getItem('luna-cfg'); if(s) cfg=Object.assign({},DEF,JSON.parse(s)); }catch(e){}
@@ -572,12 +726,20 @@ function applyCfg(){
  document.querySelectorAll('.u-msgb').forEach(e=>e.innerHTML=cfg.msgb.replace(/\n/g,'<br>'));
  ['lfnick','lftag','lfserver','lfclass','lflevel','lfcreated','lflast','lfdays','lfhours','lfguild','lfrank','lfpower','lfkills','lfupdated'].forEach(k=>setT('u-'+k,cfg[k]));
  setT('u-lfcreatedyr',(cfg.lfcreated||'').slice(0,4));
+ ['sename','secat','seborn','seorg','seedu','seproj','sesite','seown','seco','secnt'].forEach(k=>setT('u-'+k,cfg[k]));
+ $('se-career').innerHTML=(cfg.secareer||'').split('\n').filter(Boolean).map(l=>`<span class="ln">${l.replace(/</g,'&lt;')}</span>`).join('');
+ $('se-photo').src=cfg.sephoto||SE_PH;
+ $('se-rel').innerHTML=(cfg.serel||'').split('\n').filter(Boolean).map(l=>`<span>${l.replace(/</g,'&lt;')}</span>`).join('');
+ const thc=['a','b','c','d'];
+ $('se-news').innerHTML=parseLines(cfg.senews,4).map((a,i)=>`<li><div class="th ${thc[i%4]}">NEWS</div><div><div class="src"><b>${a[0]}</b>${a[2]}</div><div class="t">${a[1]}</div><div class="s">${a[3]}</div></div></li>`).join('');
+ $('se-web').innerHTML=parseLines(cfg.seweb,4).map(a=>`<li><div class="src"><i>${(a[0]||'W')[0]}</i>${a[0]}<small>${a[1]}</small></div><div class="t">${a[2]}</div><div class="s">${a[3]}</div></div></li>`).join('');
  renderMain(); if($('v-board').classList.contains('on')) renderBoard();
 }
 function buildPanel(){
  $('panel-b').innerHTML=FIELDS.map(f=>{
   if(f.length===1) return `<h5>${f[0]}</h5>`;
   const v=String(cfg[f[0]]??'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  if(f[2]==='img') return `<label><span>${f[1]}</span><div class="imgf"><img id="pv-${f[0]}" src="${cfg[f[0]]||SE_PH}"><input type="file" accept="image/*" onchange="pickImg(this,'${f[0]}')"><button type="button" onclick="clearImg('${f[0]}')">사진 제거</button></div></label>`;
   if(f[2]==='ta') return `<label><span>${f[1]}</span><textarea data-k="${f[0]}" rows="${f[0]==='body'?7:5}">${v}</textarea></label>`;
   return `<label><span>${f[1]}</span><input data-k="${f[0]}" type="${f[2]==='num'?'number':'text'}" step="0.1" value="${v.replace(/"/g,'&quot;')}"></label>`;
  }).join('');
@@ -627,6 +789,15 @@ async function autoLoad(){
  const q=new URLSearchParams(location.search).get('setup'); const last=q||localStorage.getItem('luna-last');
  if(ONLINE&&last){ try{ const d=await api('GET','/'+encodeURIComponent(last)); cfg=Object.assign({},DEF,d); applyCfg(); }catch(e){} }
 }
+const SE_PH="data:image/svg+xml;utf8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150"><rect width="120" height="150" fill="#e8ebf0"/><circle cx="60" cy="58" r="26" fill="#c3c9d4"/><path d="M14 150c4-34 22-50 46-50s42 16 46 50z" fill="#c3c9d4"/></svg>');
+function seSearch(){
+ const q=$('se-q').value.trim()||cfg.seq; $('se-q2').value=q;
+ setTimeout(()=>go('sep'), (cfg.sedelay||0.5)*1000);
+}
+function seFill(){ $('se-q').value=cfg.seq; }
+function seType(){ $('se-q').value=''; let i=0; const s=cfg.seq; const t=setInterval(()=>{ $('se-q').value=s.slice(0,++i); if(i>=s.length)clearInterval(t); },140); }
+function pickImg(inp,k){ const f=inp.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{ const im=new Image(); im.onload=()=>{ const c=document.createElement('canvas'); const s=Math.min(1,360/Math.max(im.width,im.height)); c.width=Math.round(im.width*s); c.height=Math.round(im.height*s); c.getContext('2d').drawImage(im,0,0,c.width,c.height); cfg[k]=c.toDataURL('image/jpeg',.85); const pv=$('pv-'+k); if(pv)pv.src=cfg[k]; flash('사진 선택됨 · 적용 또는 저장을 누르세요'); }; im.src=r.result; }; r.readAsDataURL(f); inp.value=''; }
+function clearImg(k){ cfg[k]=''; const pv=$('pv-'+k); if(pv)pv.src=SE_PH; }
 function lfSearch(){
  const q=$('lf-q').value.trim()||cfg.lfnick; $('lf-searching-t').textContent=`'${q}' 검색 중…`; $('lf-searching').classList.add('on');
  setTimeout(()=>{ $('lf-searching').classList.remove('on'); setT('u-lfnick',q); go('lfp'); }, (cfg.lfdelay||1.2)*1000);
@@ -654,6 +825,8 @@ function go(v){
  if(v==='write'){ setTimeout(()=>$('w-title').focus(),50); }
  if(v==='post'&&!post){ go('board'); }
  if(v==='lf'){ setTimeout(()=>$('lf-q').focus(),50); }
+ if(v==='se'){ setTimeout(()=>$('se-q').focus(),50); }
+ if(v==='sep'&&!$('se-q2').value){ $('se-q2').value=cfg.seq; }
  window.scrollTo(0,0);
 }
 function renderMain(){
@@ -703,12 +876,13 @@ function flood(){
 function openPop(){ $('ov').classList.add('on'); }
 function closePop(){ $('ov').classList.remove('on'); }
 function toast(){ const t=$('toast'); t.classList.remove('on'); void t.offsetWidth; t.classList.add('on'); }
-function reset(){ post=null; flooding=false; $('w-title').value=''; $('w-body').value=''; $('lf-q').value=''; $('lf-searching').classList.remove('on'); closePop(); $('toast').classList.remove('on'); go('main'); }
+function reset(){ post=null; flooding=false; $('w-title').value=''; $('w-body').value=''; $('lf-q').value=''; $('lf-searching').classList.remove('on'); $('se-q').value=''; $('se-q2').value=''; closePop(); $('toast').classList.remove('on'); go('main'); }
 
 document.addEventListener('keydown', e=>{
  const inField = /INPUT|TEXTAREA/.test(document.activeElement.tagName);
  const writeOn = $('v-write').classList.contains('on');
  const lfOn = $('v-lf').classList.contains('on');
+ const seOn = $('v-se').classList.contains('on');
  if(e.key==='Escape'){ closePop(); $('toast').classList.remove('on'); return; }
  if(writeOn && e.key==='Enter' && e.ctrlKey){ submitPost(); return; }
  if(inField) return;
@@ -721,6 +895,9 @@ document.addEventListener('keydown', e=>{
  if(k==='f'&&lfOn) lfFill();
  if(k==='t'&&lfOn) lfType();
  if(k==='enter'&&lfOn) lfSearch();
+ if(k==='f'&&seOn) seFill();
+ if(k==='t'&&seOn) seType();
+ if(k==='enter'&&seOn) seSearch();
  if(k==='c') { if($('v-post').classList.contains('on')) flood(); }
  if(k==='p') openPop();
  if(k==='m') toast();
@@ -730,6 +907,8 @@ document.addEventListener('keydown', e=>{
  if(k==='3') go('write');
  if(k==='4') go('lf');
  if(k==='5') go('lfp');
+ if(k==='6') go('se');
+ if(k==='7') go('sep');
 });
 applyCfg(); autoLoad();
 </script>
