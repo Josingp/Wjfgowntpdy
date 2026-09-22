@@ -40,6 +40,11 @@ export default async function handler(req, res) {
     return json(res, 200, { posts: await all() });
   }
   if (a === "clear") { await redis.del(H); await redis.set(FLAG, "1"); return json(res, 200, { posts: [] }); }
+  if (a === "mdelete") {
+    const ids = (Array.isArray(b.ids) ? b.ids : []).map(x => String(Number(x)));
+    if (ids.length) await redis.hdel(H, ...ids);
+    return json(res, 200, { posts: await all() });
+  }
   if (a === "list") { const seeded = (await redis.get(FLAG)) === "1" || (await redis.hlen(H)) > 0; return json(res, 200, { posts: await all(), seeded }); }
 
   const p = id != null ? await get(id) : null;
@@ -56,6 +61,7 @@ export default async function handler(req, res) {
     p.comments.push({ id: cid, parent: b.parent ? Number(b.parent) : null, body: clean(b.body), authorKey: clean(b.authorKey), created: now, likes: Number(b.likes) || 0 });
   }
   else if (a === "cdelete") { const c = p.comments.find(c => c.id === Number(b.cid)); if (c) { c.deleted = true; c.body = ""; } }
+  else if (a === "cupdate") { const c = p.comments.find(c => c.id === Number(b.cid)); if (c && !c.deleted) { c.body = clean(b.body); c.edited = now; } }
   else if (a === "clike") { const c = p.comments.find(c => c.id === Number(b.cid)); if (c) c.likes = Math.max(0, (c.likes || 0) + (Number(b.d) || 0)); }
   else return json(res, 400, { error: "bad action" });
 
