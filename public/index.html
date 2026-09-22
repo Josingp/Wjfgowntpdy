@@ -424,6 +424,30 @@ body.editing .cog{opacity:0;pointer-events:none}
 .pplf button{font-size:11px;color:var(--red)}
 body.editing .se .ppl i{outline:1px dashed rgba(111,95,199,.55);outline-offset:2px;cursor:pointer}
 body.editing .se .ppl i:hover{outline:1px solid var(--p)}
+/* 공용 모달 */
+.umodal{position:fixed;inset:0;background:rgba(20,18,40,.45);z-index:120;display:flex;align-items:center;justify-content:center;animation:cin .12s}
+.umodal .ub{background:#fff;border-radius:12px;width:380px;max-width:92vw;box-shadow:0 24px 70px rgba(0,0,0,.3);overflow:hidden;font-size:14px;color:var(--ink)}
+.umodal .uh{padding:16px 20px 4px;font-weight:800;font-size:15.5px}
+.umodal .um{padding:4px 20px 12px;color:#555;font-size:13.5px;line-height:1.6;white-space:pre-line}
+.umodal input{margin:0 20px 6px;width:calc(100% - 40px);border:1px solid #cfd1dc;border-radius:7px;padding:10px 12px;font:inherit;font-size:14px;outline:none}
+.umodal input:focus{border-color:var(--p)}
+.umodal .ue{margin:0 20px;color:var(--red);font-size:12.5px;min-height:18px}
+.umodal .uf{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px 16px}
+.umodal .uf .btn{padding:9px 18px;font-size:13.5px}
+.umodal .uf .btn.danger{background:var(--red)}
+/* 게시판 관리자 */
+.tbl .ck{width:34px}.tbl .ck input{width:15px;height:15px;cursor:pointer;vertical-align:-2px}
+.tbl .rowact{white-space:nowrap}.tbl .rowact a{font-size:12px;color:#888;padding:2px 5px;cursor:pointer}.tbl .rowact a:hover{color:var(--red)}
+.adminbar{display:none;align-items:center;gap:8px;background:#fff6e5;border:1px solid #f1d7a6;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:13px;color:#8a5a00}
+.adminbar.on{display:flex}.adminbar b{margin-right:auto}.adminbar .btn{padding:6px 12px;font-size:12.5px}.adminbar .btn.danger{background:var(--red)}
+.cm li .cedit{display:flex;gap:6px;margin-top:6px}.cm li .cedit input{flex:1;border:1px solid #cfd1dc;border-radius:6px;padding:7px 10px;font:inherit;font-size:13.5px;outline:none}
+.cm li .cedit button{border-radius:6px;padding:0 12px;font-size:12.5px;font-weight:700;background:var(--ink);color:#fff}.cm li .cedit button.x{background:#fff;color:#888;border:1px solid #ddd}
+.cm li .ed{font-size:11px;color:#b0b2bf;margin-left:4px}
+.post .ph .own a.del:hover{color:var(--red)}
+/* 타이핑 */
+.spd{display:flex;gap:4px;flex-wrap:wrap}.spd button{border:1px solid #cfd1dc;border-radius:6px;padding:5px 9px;font-size:12px;background:#fff;color:#444}.spd button.cur{background:var(--p);border-color:var(--p);color:#fff}
+.ghostbadge{position:fixed;left:6px;bottom:6px;z-index:98;width:6px;height:6px;border-radius:50%;background:#2ecc71;opacity:.5;display:none;overflow:hidden;color:transparent;font-size:0}
+.ghostbadge.on{display:block}
 /* settings */
 .cog{position:fixed;right:16px;top:70px;width:34px;height:34px;border-radius:50%;background:transparent;border:0;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:70;font-size:18px;color:#999;opacity:.15;transition:.2s}
 .cog:hover{opacity:1;color:var(--p)}
@@ -503,11 +527,12 @@ body.editing .se .ppl i:hover{outline:1px solid var(--p)}
 <div class="body"><div class="wrap">
  <div class="crumb">HOME &gt; 커뮤니티 &gt; 사내 익명게시판</div>
  <div class="ttl"><h2>사내 익명게시판<small>작성자 정보는 암호화되어 저장되며 관리자도 열람할 수 없습니다.</small></h2><button class="btn" onclick="go('write')">글쓰기</button></div>
+ <div class="adminbar" id="b-admin"><b>🔧 관리자 모드 — 모든 글·댓글을 비밀번호 없이 수정·삭제할 수 있습니다 (이 PC)</b><button class="btn gh" onclick="bCheckAll()">전체 선택</button><button class="btn danger" onclick="bDeleteChecked()">선택 삭제</button><button class="btn gh" onclick="bAdminOff()">관리자 모드 끄기</button></div>
  <div class="btools">
   <div class="sorts"><a class="cur" data-s="new" onclick="bSort('new')">최신순</a><a data-s="like" onclick="bSort('like')">추천순</a><a data-s="cmt" onclick="bSort('cmt')">댓글순</a><a data-s="view" onclick="bSort('view')">조회순</a><a data-s="hot" onclick="bSort('hot')">🔥 인기글</a></div>
   <div class="srch"><select id="b-cat" onchange="bFilter()"><option value="">전체 말머리</option><option>자유</option><option>회사</option><option>업무</option><option>질문</option><option>유머</option></select><select id="b-field"><option value="tb">제목+내용</option><option value="t">제목</option><option value="c">댓글</option></select><input id="b-q" placeholder="검색어" onkeydown="if(event.key==='Enter')bFilter()"><button class="btn gh" onclick="bFilter()">검색</button></div>
  </div>
- <table class="tbl"><thead><tr><th style="width:64px">번호</th><th style="width:64px">말머리</th><th>제목</th><th style="width:80px">작성자</th><th style="width:90px">작성일</th><th style="width:64px">조회</th><th style="width:64px">추천</th></tr></thead><tbody id="board-list"></tbody></table>
+ <table class="tbl"><thead><tr><th class="ck adm" style="display:none"><input type="checkbox" id="b-ckall" onclick="event.stopPropagation();bCheckAll(this.checked)"></th><th style="width:64px">번호</th><th style="width:64px">말머리</th><th>제목</th><th style="width:80px">작성자</th><th style="width:90px">작성일</th><th style="width:64px">조회</th><th style="width:64px">추천</th><th class="adm" style="display:none;width:84px">관리</th></tr></thead><tbody id="board-list"></tbody></table>
  <div class="tools"><span id="b-count"></span><span id="b-status" class="bst"></span></div>
  <div class="pager" id="b-pager"></div>
 </div></div>
@@ -749,12 +774,13 @@ body.editing .se .ppl i:hover{outline:1px solid var(--p)}
 </aside>
 <div class="edbar" id="edbar"><b>✎ 편집 모드</b><span>점선 글자 클릭 → 바로 수정 · 목록 항목 클릭 → 편집창</span><span class="ed-st" id="ed-st"></span><input id="ed-name" placeholder="셋업 이름"><button onclick="edSave()">서버에 저장</button><button class="gh" onclick="edUndoAll()">되돌리기</button><button class="x" onclick="edToggle(false)">종료 (E)</button></div>
 <input type="file" id="ed-file" accept="image/*" style="display:none">
+<div class="ghostbadge" id="ghostbadge">⌨ 고스트 타이핑 ON · 아무 키나 누르세요 (Esc로 끄기)</div>
 <div class="hint" id="hint">
 <kbd>H</kbd>이 안내 숨기기/보기<br>
 <kbd>F</kbd>글쓰기 화면 본문 자동 입력 &nbsp;<kbd>T</kbd>타이핑 연출로 입력<br>
 <kbd>Enter</kbd>글쓰기 화면에서 등록 &nbsp;<kbd>C</kbd>글 화면에서 댓글·추천 폭주 시작<br>
 <kbd>P</kbd>인사발령 팝업 &nbsp;<kbd>M</kbd>메신저 알림 &nbsp;<kbd>R</kbd>초기화(글 삭제)<br>
-<kbd>1</kbd>메인 &nbsp;<kbd>2</kbd>익명게시판 &nbsp;<kbd>3</kbd>글쓰기 &nbsp;<kbd>Esc</kbd>팝업 닫기<br><kbd>4</kbd>라판 전적검색 홈 &nbsp;<kbd>5</kbd>검색 결과 (홈에서 F/T 입력 → Enter)<br><kbd>6</kbd>검색엔진 홈 &nbsp;<kbd>7</kbd>인물 검색 결과<br><kbd>S</kbd>설정 메뉴 &nbsp;<kbd>E</kbd>화면에서 직접 수정 모드
+<kbd>1</kbd>메인 &nbsp;<kbd>2</kbd>익명게시판 &nbsp;<kbd>3</kbd>글쓰기 &nbsp;<kbd>Esc</kbd>팝업 닫기<br><kbd>4</kbd>라판 전적검색 홈 &nbsp;<kbd>5</kbd>검색 결과 (홈에서 F/T 입력 → Enter)<br><kbd>6</kbd>검색엔진 홈 &nbsp;<kbd>7</kbd>인물 검색 결과<br><kbd>T</kbd>자동 타이핑 (다시 T로 멈춤) &nbsp;<kbd>G</kbd>고스트 타이핑<br><kbd>S</kbd>설정 메뉴 &nbsp;<kbd>E</kbd>화면에서 직접 수정 모드
 </div>
 
 <script>
@@ -763,7 +789,7 @@ const DEF = {
  sub:"라스트 판타지아 LIVE 서비스 · 개발2본부 서버운영팀 · 사번 LS-2019-0417", wx:"24°|맑음 · 서울 구로|퇴근까지 4시간 12분",
  title:"라스트 판타지아는 누군가의 유일한 왕국입니다",
  body:"현실에서 이름 없는 사람들이 있습니다.\n회사에서도, 어디서도, 아무도 기억해주지 않는 사람들이요.\n그런 사람들이 라판에서는 이름을 가집니다.\n길드가 있고, 동료가 있고, 지켜야 할 성이 있습니다.\n당신들이 닫으려는 건 서버가 아니라..\n그 사람들의 왕국입니다",
- delay:1.8, speed:1, autoflood:true,
+ delay:1.8, speed:1, autoflood:true, badminpw:"0000", tpm:120, tnat:true, tjamo:true,
  comments:"익명1|이거 진짜... 라판 8년 유저인데 눈물 나네요|34\n익명2|서버운영팀 분이신가요? 이런 글 올려주셔서 감사합니다|21\n익명3|윗분들 이 글 꼭 보셨으면|19\n익명4|우리 회사가 만든 첫 세계잖아요. 이렇게 닫는 게 맞나|27\n익명5|저 라판 길드장 7년째입니다. 길드원 200명 다 우리 유저예요|41\n익명6|매출로만 볼 게 아니라는 말이 이거였구나|12\n익명7|솔직히 회사에서도 이름 없는 사람이 저라서 더 와닿음|56\n익명8|동접 3만이면 적은 숫자 아닌데 왜 닫죠|18\n익명9|작성자분 정체 궁금하지만 안 물어볼게요. 응원합니다|23\n익명10|경영진 간담회 때 이 글 인쇄해서 들고 가자|38\n익명11|라판 첫 오픈날 서버실에서 밤샜던 사람입니다. 아직 여기 있어요|47\n익명12|왕국이라는 표현에 울컥|15\n익명13|이 글 지우기 전에 캡처해둠|29\n익명14|서비스 종료 결정 재검토 서명 받으면 저부터 합니다|62\n익명15|유저들한테는 아직 공지 안 나갔죠? 그 전에 뭐라도 해야|20\n익명16|저희 팀 단톡에 공유했어요|11\n익명17|개발2본부 파이팅|17\n익명18|10년차인데 이런 글 처음 봄|25",
  seed:"3분기 재편 얘기 도는데 어느 팀이 대상인지 아는 사람?|42|18|09.10\n12층 라운지 공사 소음 너무 심하지 않나요|15|7|09.10\n구내식당 목요일 메뉴 바뀐 거 만족하시는 분|8|3|09.09\n야근 택시비 지급 기준 원래 이랬나요?|27|11|09.09\n라판 동접 수치 진짜인지 궁금|33|9|09.08\n신규 프로젝트 인력 충원 소문 사실인가요|19|6|09.08\n연차 눈치 안 보고 쓰는 팀 어디예요|61|24|09.07\n회의실 예약해놓고 안 쓰는 분들 제발|12|4|09.07\n사내 헬스장 샤워실 온수 안 나옴|5|2|09.06\n대표님 타운홀에서 하신 말씀 해석 좀|48|15|09.05",
  notice:"중요|[전사] 3분기 서비스 포트폴리오 재편 관련 경영진 간담회 안내|09.10\n인사|2026년 하반기 정기 인사평가 일정 공지|09.09\n총무|본사 12F 라운지 리모델링에 따른 이용 제한 안내 (9/15~9/26)|09.08\n보안|외부 저장매체 반입·반출 절차 강화 시행|09.07\n복지|추석 명절 선물 신청 접수 (~9/18)|09.04\nIT|그룹웨어 정기 점검 안내 (9/13 토 02:00~06:00)|09.03",
@@ -791,7 +817,9 @@ const TABS=[
  ]},
  {id:'board',label:'익명게시판·글',screen:'write',groups:[
   ['주인공이 쓰는 글 (F/T 자동 입력)',[["title","제목"],["body","본문","ta"]]],
+  ['타이핑 연출 (T 자동 타이핑 · G 고스트 타이핑)',[["tpm","타자 속도 (타/분 · 낮을수록 천천히)","num"],["spd","","html",'<div class="spd" id="spd"></div>'],["tnat","사람처럼 치기 (간격 불규칙 · 띄어쓰기·문장 끝에서 잠깐 멈춤)","chk"],["tjamo","한글 자모가 조합되는 과정 보이기 (ㅎ→하→한)","chk"],["tip2","","html",'<div class="tip" style="margin:6px 0 0">T: 설정한 속도로 자동 타이핑 (다시 T 또는 Esc로 멈춤)<br>G: 고스트 타이핑 켜기(Esc로 끄기) — 배우가 키보드를 아무렇게나 두드리면 대본이 한 타씩 입력됩니다. 다 치고 Enter를 누르면 등록/검색. 키보드는 <b>영문 입력 상태</b>로 두세요.<br>글쓰기·라판 검색·검색엔진 화면에서 모두 동작합니다.</div>']]],
   ['댓글 폭주 연출',[["autoflood","글 등록 직후 자동으로 폭주 (끄면 C 키로만)","chk"],["delay","등록 후 시작까지 (초)","num"],["speed","속도 배율","num"],["comments","폭주 댓글 (닉네임|내용|추천수)","ta"]]],
+  ['글·댓글 수정·삭제',[["badmin","관리자 모드 — 이 PC에서 모든 글·댓글을 비밀번호 없이 수정·삭제 (목록에서 선택 삭제)","chk"],["badminpw","관리자 비밀번호 (다른 PC에서 남의 글을 지울 때)"],["tip3","","html",'<div class="tip" style="margin:6px 0 0">글 수정·삭제: 글 화면 우상단 버튼. 내가 쓴 글은 바로, 남의 글은 글 비밀번호 또는 관리자 비밀번호로 가능합니다.<br>댓글 수정·삭제: 내 댓글은 항상, 관리자 모드에서는 모든 댓글에 버튼이 보입니다.</div>']]],
   ['게시판 관리 (서버 저장 · 모든 PC 공유)',[["board","","html",'<div class="brow"><button type="button" class="btn gh" onclick="bReseed()">샘플 글 32개 다시 만들기</button><button type="button" class="btn gh" onclick="bClear()">게시판 비우기</button></div>']]],
  ]},
  {id:'pop',label:'인사발령·알림',screen:'main',open:true,groups:[
@@ -812,6 +840,8 @@ const TABS=[
  ]},
  {id:'setup',label:'셋업 저장·공유',groups:null},
 ];
+const isAdmin=()=>{ try{ return localStorage.getItem('luna-badmin')==='1'; }catch(e){ return false; } };
+function syncAdmin(){ if('badmin' in cfg){ try{ localStorage.setItem('luna-badmin',cfg.badmin?'1':'0'); }catch(e){} delete cfg.badmin; } }
 let cfg = Object.assign({}, DEF);
 try{ const s=localStorage.getItem('luna-cfg'); if(s) cfg=Object.assign({},DEF,JSON.parse(s)); }catch(e){}
 let TITLE, BODY, seed, comments;
@@ -843,7 +873,7 @@ function applyCfg(){
 }
 function fieldHTML(f){
  const v=String(cfg[f[0]]??'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
- if(f[2]==='chk') return `<label class="chk"><input type="checkbox" data-k="${f[0]}" ${cfg[f[0]]?'checked':''}> ${f[1]}</label>`;
+ if(f[2]==='chk') return `<label class="chk"><input type="checkbox" data-k="${f[0]}" ${(f[0]==='badmin'?isAdmin():cfg[f[0]])?'checked':''}> ${f[1]}</label>`;
  if(f[2]==='html') return `<div>${f[3]}</div>`;
  if(f[2]==='img') return `<label><span>${f[1]}</span><div class="imgf"><img id="pv-${f[0]}" src="${cfg[f[0]]||SE_PH}"><input type="file" accept="image/*" onchange="pickImg(this,'${f[0]}')"><button type="button" onclick="clearImg('${f[0]}')">사진 제거</button></div></label>`;
  if(f[2]==='ta') return `<label><span>${f[1]}</span><textarea data-k="${f[0]}" rows="${f[0]==='body'?7:4}">${v}</textarea></label>`;
@@ -865,16 +895,21 @@ function buildPanel(){
  $('panel-b').innerHTML=t.groups.map(g=> g[0]==='tip'? `<div class="tip">${g[1]}</div>` : `<div class="pcard"><h6>${g[0]}</h6>${g[1].map(fieldHTML).join('')}</div>`).join('');
  $('pf-st').textContent='적용 = 이 PC에 반영 · 다른 PC와 공유하려면 「셋업 저장·공유」';
  if($('pplf')) buildPplFiles();
+ if($('spd')) buildSpd();
 }
 function buildPplFiles(){
  const P=cfg.sepphotos||{};
  $('pplf').innerHTML='<span class="pl">인물 사진</span>'+parseLines(cfg.sepeople,2).map((a,i)=>`<div class="pf"><label class="av" style="${P[i]?`background-image:url(${P[i]});background-size:cover;background-position:50% 50%`:''}"><input type="file" accept="image/*" style="display:none" onchange="pickPeopleImg(this,${i});setTimeout(buildPplFiles,500)">${P[i]?'':'+'}</label><span>${esc(a[0])}</span>${P[i]?`<button type="button" onclick="clearPeopleImg(${i});buildPplFiles()">제거</button>`:''}</div>`).join('');
 }
+function buildSpd(){
+ const inp=document.querySelector('[data-k="tpm"]'); const cur=+(inp?.value||cfg.tpm);
+ $('spd').innerHTML=[[50,'아주 천천히'],[120,'천천히'],[220,'보통'],[380,'빠르게']].map(([v,l])=>`<button type="button" class="${cur===v?'cur':''}" onclick="document.querySelector('[data-k=tpm]').value=${v};cfg.tpm=${v};try{localStorage.setItem('luna-cfg',JSON.stringify(cfg))}catch(e){};buildSpd()">${l} ${v}</button>`).join('');
+}
 function panelTab(id){ ED.tab=id; const t=TABS.find(x=>x.id===id); if(t&&t.screen){ go(t.screen); if(t.open){ openPop(); toast(); } else { closePop(); } } buildPanel(); }
 function applyFromPanel(){
- $('panel-b').querySelectorAll('[data-k]').forEach(e=>{ cfg[e.dataset.k]= e.type==='checkbox'? e.checked : e.type==='number'? (+e.value||DEF[e.dataset.k]) : e.value; });
+ $('panel-b').querySelectorAll('[data-k]').forEach(e=>{ cfg[e.dataset.k]= e.type==='checkbox'? e.checked : e.type==='number'? (+e.value||DEF[e.dataset.k]) : e.value; }); syncAdmin();
  try{ localStorage.setItem('luna-cfg',JSON.stringify(cfg)); }catch(e){}
- applyCfg(); if(post){ post.title=cfg.title; } flash('적용됨');
+ applyCfg(); if($('v-board').classList.contains('on')) renderBoard(); if($('v-post').classList.contains('on')) renderPost(); flash('적용됨');
 }
 function restoreDefaults(){ if(!confirm('모든 설정을 기본값으로 되돌릴까요?'))return; cfg=Object.assign({},DEF); try{localStorage.removeItem('luna-cfg');}catch(e){} buildPanel(); applyCfg(); edResetOv(); flash('기본값 복원'); }
 function exportCfg(){ const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(cfg,null,2)],{type:'application/json'})); a.download='luna-설정.json'; a.click(); }
@@ -892,7 +927,7 @@ async function listPresets(){
 function setSt(m,ok){ const e=$('ps-st'); e.textContent=m; e.className='ps-st '+(ok?'ok':'off'); }
 async function savePreset(){
  const n=$('ps-name').value.trim(); if(!n){ alert('셋업 이름을 입력하세요.'); return; }
- $('panel-b').querySelectorAll('[data-k]').forEach(e=>{ cfg[e.dataset.k]= e.type==='checkbox'? e.checked : e.type==='number'? (+e.value||DEF[e.dataset.k]) : e.value; });
+ $('panel-b').querySelectorAll('[data-k]').forEach(e=>{ cfg[e.dataset.k]= e.type==='checkbox'? e.checked : e.type==='number'? (+e.value||DEF[e.dataset.k]) : e.value; }); syncAdmin();
  try{
   if(ONLINE) await api('PUT','/'+encodeURIComponent(n),cfg); else { const p=lsPresets(); p[n]=cfg; localStorage.setItem('luna-presets',JSON.stringify(p)); }
   localStorage.setItem('luna-cfg',JSON.stringify(cfg)); localStorage.setItem('luna-last',n);
@@ -931,8 +966,8 @@ function seSearch(){
  sugHide('se-q'); const q=$('se-q').value.trim()||cfg.seq; $('se-q2').value=q;
  setTimeout(()=>go('sep'), (cfg.sedelay||0.5)*1000);
 }
-function seFill(){ $('se-q').value=cfg.seq; $('se-q').focus(); sugRender('se-q'); }
-function seType(){ $('se-q').value=''; $('se-q').focus(); let i=0; const s=cfg.seq; const t=setInterval(()=>{ $('se-q').value=s.slice(0,++i); sugRender('se-q'); if(i>=s.length)clearInterval(t); },140); }
+function seFill(){ typeStop(); $('se-q').value=cfg.seq; $('se-q').focus(); sugRender('se-q'); }
+function seType(){ if(typing()){ typeStop(); return; } typeRun([{el:$('se-q'),text:cfg.seq,after:()=>sugRender('se-q')}]); }
 function pickPeopleImg(inp,i){ const f=inp.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{ const im=new Image(); im.onload=()=>{ const c=document.createElement('canvas'); const s=Math.min(1,220/Math.max(im.width,im.height)); c.width=Math.round(im.width*s); c.height=Math.round(im.height*s); c.getContext('2d').drawImage(im,0,0,c.width,c.height); cfg.sepphotos=cfg.sepphotos||{}; cfg.sepphotos[i]=c.toDataURL('image/jpeg',.82); applyCfg(); edDirty(); flash('사진이 적용됐습니다'); }; im.src=r.result; }; r.readAsDataURL(f); inp.value=''; }
 function clearPeopleImg(i){ if(cfg.sepphotos) delete cfg.sepphotos[i]; applyCfg(); edDirty(); }
 function pickImg(inp,k){ const f=inp.files[0]; if(!f)return; const r=new FileReader(); r.onload=()=>{ const im=new Image(); im.onload=()=>{ const c=document.createElement('canvas'); const s=Math.min(1,360/Math.max(im.width,im.height)); c.width=Math.round(im.width*s); c.height=Math.round(im.height*s); c.getContext('2d').drawImage(im,0,0,c.width,c.height); cfg[k]=c.toDataURL('image/jpeg',.85); const pv=$('pv-'+k); if(pv)pv.src=cfg[k]; flash('사진 선택됨 · 적용 또는 저장을 누르세요'); }; im.src=r.result; }; r.readAsDataURL(f); inp.value=''; }
@@ -941,8 +976,8 @@ function lfSearch(){
  const q=$('lf-q').value.trim()||cfg.lfnick; $('lf-searching-t').textContent=`'${q}' 검색 중…`; $('lf-searching').classList.add('on');
  setTimeout(()=>{ $('lf-searching').classList.remove('on'); setT('u-lfnick',q); go('lfp'); }, (cfg.lfdelay||1.2)*1000);
 }
-function lfFill(){ $('lf-q').value=cfg.lfnick; }
-function lfType(){ $('lf-q').value=''; let i=0; const s=cfg.lfnick; const t=setInterval(()=>{ $('lf-q').value=s.slice(0,++i); if(i>=s.length)clearInterval(t); },120); }
+function lfFill(){ typeStop(); $('lf-q').value=cfg.lfnick; }
+function lfType(){ if(typing()){ typeStop(); return; } typeRun([{el:$('lf-q'),text:cfg.lfnick}]); }
 /* ===== 화면에서 직접 수정 (편집 모드) ===== */
 const ED={on:false,tab:'main',dirty:false,timer:null,orig:{}};
 const ED_ML=['foot','msgb','wx','note','body','sub'];
@@ -1030,6 +1065,22 @@ async function edSave(){ const n=$('ed-name').value.trim(); if(!n){ alert('셋�
 function edUndoAll(){ if(!confirm('이번 편집 모드에서 바꾼 내용을 마지막 저장 상태로 되돌릴까요?'))return; try{ const s=localStorage.getItem('luna-cfg-snap'); if(s){ cfg=Object.assign({},DEF,JSON.parse(s)); applyCfg(); edApplyOv(); ED.dirty=false; edBarState(); } }catch(e){} }
 
 function togglePanel(){ const p=$('panel'); if(!p.classList.contains('on')) buildPanel(); p.classList.toggle('on'); }
+function uiModal({title,msg='',input=null,ok='확인',cancel='취소',danger=false,value=''}){
+ return new Promise(res=>{
+  const m=document.createElement('div'); m.className='umodal';
+  m.innerHTML=`<div class="ub"><div class="uh">${esc(title)}</div>${msg?`<div class="um">${esc(msg)}</div>`:''}${input?`<input type="${input}" autocomplete="off" value="${esc(value)}"><div class="ue"></div>`:''}<div class="uf">${cancel?`<button class="btn gh" data-x>${cancel}</button>`:''}<button class="btn ${danger?'danger':''}" data-ok>${ok}</button></div></div>`;
+  document.body.appendChild(m); const inp=m.querySelector('input');
+  const done=v=>{ m.remove(); document.removeEventListener('keydown',kd,true); res(v); };
+  const kd=e=>{ if(e.key==='Escape'){ e.stopPropagation(); e.preventDefault(); done(null); } else if(e.key==='Enter'){ e.stopPropagation(); e.preventDefault(); done(input?inp.value:true); } };
+  document.addEventListener('keydown',kd,true);
+  m.querySelector('[data-ok]').onclick=()=>done(input?inp.value:true);
+  const x=m.querySelector('[data-x]'); if(x) x.onclick=()=>done(null);
+  m.onclick=e=>{ if(e.target===m) done(null); };
+  setTimeout(()=>{ (inp||m.querySelector('[data-ok]')).focus(); },30);
+ });
+}
+const uiConfirm=(title,msg,ok='확인',danger=false)=>uiModal({title,msg,ok,danger});
+const uiAlert=(title,msg)=>uiModal({title,msg,cancel:null});
 function flash(m){ const t=document.createElement('div'); t.className='flash'; t.textContent=m; document.body.appendChild(t); setTimeout(()=>t.remove(),1200); }
 
 const $ = id => document.getElementById(id);
@@ -1042,6 +1093,7 @@ $('pp-date').textContent = `${dateStr} · 인사팀`;
 $('pp-date2').textContent = `${now.getFullYear()}년 ${now.getMonth()+1}월 ${now.getDate()}일`;
 
 function go(v,opt){
+ typeStop(); if(typeof GH!=='undefined'&&GH.on){ GH.on=false; $('ghostbadge').classList.remove('on'); }
  document.querySelectorAll('.view').forEach(e=>e.classList.remove('on'));
  $('v-'+v).classList.add('on');
  if(v==='main') renderMain();
@@ -1074,6 +1126,7 @@ function localBoard(action,d){
  if(action==='create'){ const p={id:++seq,cat:d.cat||'자유',title:d.title,body:d.body,pw:d.pw||'',authorKey:d.authorKey,created:now,views:0,likes:0,dislikes:0,notice:!!d.notice,comments:[]}; posts.unshift(p); save(); return {posts,id:p.id}; }
  if(action==='bulk'){ if(d.replace) posts=[]; d.posts.forEach(p=>{ p.id=++seq; posts.unshift(p); }); posts.sort((a,b)=>b.id-a.id); save(); return {posts}; }
  if(action==='clear'){ posts=[]; save(); return {posts}; }
+ if(action==='mdelete'){ const ids=(d.ids||[]).map(Number); posts=posts.filter(p=>!ids.includes(p.id)); save(); return {posts}; }
  const p=find(); if(!p) return {posts};
  if(action==='update'){ Object.assign(p,{title:d.title,body:d.body,cat:d.cat}); if(d.pw!=null)p.pw=d.pw; p.edited=now; }
  else if(action==='delete'){ posts=posts.filter(x=>x!==p); }
@@ -1083,6 +1136,7 @@ function localBoard(action,d){
  else if(action==='dislike') p.dislikes=Math.max(0,(p.dislikes||0)+d.d);
  else if(action==='comment'){ const cid=(p.comments.reduce((m,c)=>Math.max(m,c.id),0)||0)+1; p.comments.push({id:cid,parent:d.parent||null,body:d.body,authorKey:d.authorKey,created:now,likes:d.likes||0}); }
  else if(action==='cdelete'){ const c=p.comments.find(c=>c.id==d.cid); if(c){c.deleted=true;c.body='';} }
+ else if(action==='cupdate'){ const c=p.comments.find(c=>c.id==d.cid); if(c&&!c.deleted){c.body=d.body;c.edited=now;} }
  else if(action==='clike'){ const c=p.comments.find(c=>c.id==d.cid); if(c)c.likes=Math.max(0,(c.likes||0)+d.d); }
  save(); return {posts};
 }
@@ -1102,7 +1156,21 @@ function bStatus(){ const e=$('b-status'); if(!e)return; if(!ONLINE) { e.textCon
 const post=()=>B.posts.find(p=>p.id===B.cur)||null;
 const isHot=p=>(p.likes||0)>=20;
 const isNew=p=>Date.now()-p.created<3*3600*1000;
-const canEdit=p=>p.authorKey===B.uid;
+const canEdit=p=>p.authorKey===B.uid||isAdmin();
+const canEditC=c=>c.authorKey===B.uid||isAdmin();
+async function bAuth(p){
+ if(canEdit(p)) return true;
+ const v=await uiModal({title:'비밀번호 확인',msg:p.pw?'글 작성 시 설정한 비밀번호를 입력하세요.':'비밀번호가 설정되지 않은 글입니다.\n관리자 비밀번호를 입력하세요.',input:'password',ok:'확인'});
+ if(v===null) return false;
+ if((p.pw&&v===p.pw)||v===String(cfg.badminpw||'0000')) return true;
+ await uiAlert('비밀번호가 일치하지 않습니다','다시 확인해 주세요.'); return false;
+}
+async function bAuthC(c){
+ if(canEditC(c)) return true;
+ const v=await uiModal({title:'관리자 확인',msg:'다른 사람의 댓글입니다. 관리자 비밀번호를 입력하세요.',input:'password'});
+ if(v===null) return false; if(v===String(cfg.badminpw||'0000')) return true;
+ await uiAlert('비밀번호가 일치하지 않습니다','다시 확인해 주세요.'); return false;
+}
 
 /* --- 목록 --- */
 function bSort(s){ B.sort=s; B.page=1; renderBoard(); }
@@ -1118,14 +1186,16 @@ function filtered(){
 }
 function rowHTML(p){
  const cm=p.comments.filter(c=>!c.deleted).length;
- return `<tr class="${p.notice?'notice':''} ${isNew(p)?'new':''}" onclick="openPost(${p.id})"><td>${p.notice?'<span class="no">공지</span>':p.id}</td><td>${p.notice?'':`<span class="cat">${esc(p.cat)}</span>`}</td><td class="s">${isHot(p)?'<span class="fire">🔥</span>':''}${esc(p.title)}${cm?`<span class="cnt">[${cm}]</span>`:''}${isNew(p)&&!p.notice?'<span class="new">N</span>':''}</td><td>${p.notice?'관리자':'익명'}</td><td>${fmt(p.created)}</td><td>${p.views}</td><td>${p.likes}</td></tr>`;
+ const A=isAdmin();
+ return `<tr class="${p.notice?'notice':''} ${isNew(p)?'new':''}" onclick="openPost(${p.id})">${A?`<td class="ck" onclick="event.stopPropagation()"><input type="checkbox" class="bck" value="${p.id}"></td>`:''}<td>${p.notice?'<span class="no">공지</span>':p.id}</td><td>${p.notice?'':`<span class="cat">${esc(p.cat)}</span>`}</td><td class="s">${isHot(p)?'<span class="fire">🔥</span>':''}${esc(p.title)}${cm?`<span class="cnt">[${cm}]</span>`:''}${isNew(p)&&!p.notice?'<span class="new">N</span>':''}</td><td>${p.notice?'관리자':'익명'}</td><td>${fmt(p.created)}</td><td>${p.views}</td><td>${p.likes}</td>${A?`<td class="rowact" onclick="event.stopPropagation()"><a onclick="B.cur=${p.id};bEdit()">수정</a><a onclick="bDeleteId(${p.id})">삭제</a></td>`:''}</tr>`;
 }
 function renderBoard(){
  document.querySelectorAll('.sorts a').forEach(a=>a.classList.toggle('cur',a.dataset.s===B.sort));
  const L=filtered(); const total=L.length; const pages=Math.max(1,Math.ceil(total/B.per)); if(B.page>pages)B.page=pages;
  const slice=L.slice((B.page-1)*B.per,B.page*B.per);
  const notices=B.page===1&&!B.q&&!B.cat&&B.sort!=='hot'? B.posts.filter(p=>p.notice):[];
- $('board-list').innerHTML=(notices.map(rowHTML).join('')+slice.map(rowHTML).join(''))||`<tr class="emptyrow"><td colspan="7">${B.loaded?'게시글이 없습니다.':'불러오는 중…'}</td></tr>`;
+ const A=isAdmin(); $('b-admin').classList.toggle('on',A); document.querySelectorAll('#v-board .tbl .adm').forEach(e=>e.style.display=A?'':'none'); if($('b-ckall'))$('b-ckall').checked=false;
+ $('board-list').innerHTML=(notices.map(rowHTML).join('')+slice.map(rowHTML).join(''))||`<tr class="emptyrow"><td colspan="${A?9:7}">${B.loaded?'게시글이 없습니다.':'불러오는 중…'}</td></tr>`;
  $('b-count').innerHTML=`전체 <b>${total.toLocaleString()}</b>건${B.q?` · '${esc(B.q)}' 검색 결과`:''}`;
  let s=Math.max(1,Math.min(B.page-4,pages-9)), e=Math.min(pages,s+9); let h=`<a class="${B.page===1?'dis':''}" onclick="${B.page>1?`bPage(${B.page-1})`:''}">‹</a>`;
  for(let i=s;i<=e;i++) h+=`<a class="${i===B.page?'cur':''}" onclick="bPage(${i})">${i}</a>`;
@@ -1140,7 +1210,7 @@ function renderMain(){
 
 /* --- 글 보기 --- */
 async function openPost(id){
- B.cur=id; B.reply=null; go('post');
+ B.cur=id; B.reply=null; B.cedit=null; go('post');
  const key='v'+id; if(!sessionStorage.getItem(key)){ sessionStorage.setItem(key,'1'); await bapi('view',{id}); renderPost(); }
 }
 function names(p){ const m={}; let n=0; p.comments.forEach(c=>{ if(c.authorKey===p.authorKey) m[c.authorKey]='글쓴이'; else if(!m[c.authorKey]) m[c.authorKey]='익명'+(++n); }); return m; }
@@ -1152,10 +1222,10 @@ function renderPost(){
  if(B.csort==='like') roots.sort((a,b)=>(b.likes||0)-(a.likes||0)||a.created-b.created); else if(B.csort==='new') roots.sort((a,b)=>b.created-a.created); else roots.sort((a,b)=>a.created-b.created);
  const best=live.filter(c=>(c.likes||0)>=3).sort((a,b)=>b.likes-a.likes).slice(0,2);
  const cHTML=(c,reply)=> c.deleted? `<li class="${reply?'reply':''}"><span class="dl">삭제된 댓글입니다.</span></li>` :
-  `<li class="${reply?'reply':''}"><span class="who ${nm[c.authorKey]==='글쓴이'?'op':''} ${c.authorKey===B.uid?'me':''}">${nm[c.authorKey]||'익명'}</span>${nl(c.body)}<span class="when">${ago(c.created)}</span><span class="acts">${reply?'':`<a onclick="bReplyBox(${c.id})">답글</a>`}${c.authorKey===B.uid?`<a onclick="bCDelete(${c.id})">삭제</a>`:''}</span><span class="lk ${clk[c.id]?'on':''}" onclick="bCLike(${c.id})">👍 ${c.likes||0}</span></li>`
+  `<li class="${reply?'reply':''}"><span class="who ${nm[c.authorKey]==='글쓴이'?'op':''} ${c.authorKey===B.uid?'me':''}">${nm[c.authorKey]||'익명'}</span>${B.cedit===c.id?`<div class="cedit"><input id="c-edit" value="${esc(c.body)}" onkeydown="if(event.key==='Enter')bCSave(${c.id});if(event.key==='Escape'){B.cedit=null;renderPost()}"><button onclick="bCSave(${c.id})">저장</button><button class="x" onclick="B.cedit=null;renderPost()">취소</button></div>`:`${nl(c.body)}${c.edited?'<span class="ed">(수정됨)</span>':''}<span class="when">${ago(c.created)}</span><span class="acts">${reply?'':`<a onclick="bReplyBox(${c.id})">답글</a>`}${canEditC(c)?`<a onclick="bCEdit(${c.id})">수정</a><a onclick="bCDelete(${c.id})">삭제</a>`:''}</span>`}<span class="lk ${clk[c.id]?'on':''}" onclick="bCLike(${c.id})">👍 ${c.likes||0}</span></li>`
   +(B.reply===c.id?`<div class="rin"><input id="c-reply" placeholder="답글을 남겨주세요. (익명)" onkeydown="if(event.key==='Enter')bComment(${c.id})"><button onclick="bComment(${c.id})">등록</button><button class="x" onclick="B.reply=null;renderPost()">취소</button></div>`:'');
  box.innerHTML=`
-  <div class="ph">${!p.notice?`<div class="own">${canEdit(p)||p.pw?`<a onclick="bEdit()">수정</a><a onclick="bDelete()">삭제</a>`:''}<a>신고</a></div>`:''}
+  <div class="ph">${!p.notice||isAdmin()?`<div class="own"><a onclick="bEdit()">수정</a><a class="del" onclick="bDelete()">삭제</a>${p.notice?'':'<a onclick="flash(\'신고가 접수되었습니다\')">신고</a>'}</div>`:''}
    <h2>${p.notice?'<span class="cat">공지</span>':`<span class="cat">${esc(p.cat)}</span>`}${esc(p.title)}</h2>
    <div class="pm"><span>작성자 <b>${p.notice?'관리자':'익명'}</b></span><span>${fmtFull(p.created)}${p.edited?' (수정됨)':''}</span><span>조회 <b>${p.views}</b></span><span>추천 <b>${p.likes}</b></span><span>댓글 <b>${live.length}</b></span></div></div>
   <div class="pb">${nl(p.body)}</div>
@@ -1168,6 +1238,7 @@ function renderPost(){
  const L=B.posts.filter(x=>!x.notice).sort((a,b)=>b.created-a.created); const i=L.findIndex(x=>x.id===p.id); const prev=L[i-1], next=L[i+1];
  $('post-nav').innerHTML=`<div class="${prev?'':'dis'}" onclick="${prev?`openPost(${prev.id})`:''}"><span>▲ 이전글</span>${prev?esc(prev.title):'이전 글이 없습니다'}</div><div class="${next?'':'dis'}" onclick="${next?`openPost(${next.id})`:''}"><span>▼ 다음글</span>${next?esc(next.title):'다음 글이 없습니다'}</div>`;
  if(B.reply){ const r=$('c-reply'); if(r) r.focus(); }
+ if(B.cedit){ const r=$('c-edit'); if(r){ r.focus(); r.setSelectionRange(r.value.length,r.value.length); } }
 }
 async function bLike(d){
  const p=post(); if(!p)return; const lk=liked(); const my=lk[p.id]||0;
@@ -1180,11 +1251,16 @@ async function bComment(parent){
  await bapi('comment',{id:B.cur,body,parent:parent||null,authorKey:B.uid}); B.reply=null; renderPost(); renderMain();
 }
 function bReplyBox(cid){ B.reply=B.reply===cid?null:cid; renderPost(); }
-async function bCDelete(cid){ if(!confirm('댓글을 삭제할까요?'))return; await bapi('cdelete',{id:B.cur,cid}); renderPost(); }
+async function bCDelete(cid){ const c=post()?.comments.find(x=>x.id===cid); if(!c||!(await bAuthC(c)))return; if(!(await uiConfirm('댓글을 삭제할까요?','삭제한 댓글은 "삭제된 댓글입니다"로 표시됩니다.','삭제',true)))return; await bapi('cdelete',{id:B.cur,cid}); flash('댓글이 삭제되었습니다'); renderPost(); renderMain(); }
+async function bCEdit(cid){ const c=post()?.comments.find(x=>x.id===cid); if(!c||!(await bAuthC(c)))return; B.cedit=cid; B.reply=null; renderPost(); }
+async function bCSave(cid){ const v=($('c-edit')?.value||'').trim(); if(!v){ $('c-edit')?.focus(); return; } await bapi('cupdate',{id:B.cur,cid,body:v}); B.cedit=null; flash('댓글이 수정되었습니다'); renderPost(); }
 async function bCLike(cid){ const lk=liked(); const k='c'+B.cur; lk[k]=lk[k]||{}; const on=!!lk[k][cid]; if(on) delete lk[k][cid]; else lk[k][cid]=1; setLiked(lk); await bapi('clike',{id:B.cur,cid,d:on?-1:1}); renderPost(); }
-function bCheckPw(p){ if(canEdit(p)) return true; if(!p.pw){ alert('이 글은 작성한 PC에서만 수정·삭제할 수 있습니다.'); return false; } const v=prompt('비밀번호를 입력하세요'); if(v===null) return false; if(v!==p.pw){ alert('비밀번호가 일치하지 않습니다.'); return false; } return true; }
-function bEdit(){ const p=post(); if(!p||!bCheckPw(p))return; B.edit=p.id; go('write','edit'); }
-async function bDelete(){ const p=post(); if(!p||!bCheckPw(p))return; if(!confirm('글을 삭제할까요? 댓글도 함께 삭제됩니다.'))return; await bapi('delete',{id:p.id}); B.cur=null; flash('삭제되었습니다'); go('board'); }
+async function bEdit(){ const p=post(); if(!p||!(await bAuth(p)))return; B.edit=p.id; go('write','edit'); }
+async function bDelete(){ const p=post(); if(!p||!(await bAuth(p)))return; if(!(await uiConfirm('글을 삭제할까요?','댓글도 함께 삭제되며 되돌릴 수 없습니다.','삭제',true)))return; await bapi('delete',{id:p.id}); B.cur=null; flash('삭제되었습니다'); go('board'); renderMain(); }
+async function bDeleteId(id){ B.cur=id; const p=post(); if(!p)return; if(!(await uiConfirm('글을 삭제할까요?',`「${p.title}」\n댓글도 함께 삭제되며 되돌릴 수 없습니다.`,'삭제',true)))return; await bapi('delete',{id}); B.cur=null; flash('삭제되었습니다'); renderBoard(); renderMain(); }
+function bCheckAll(v){ const L=[...document.querySelectorAll('.bck')]; if(v==null) v=!L.every(x=>x.checked); L.forEach(x=>x.checked=v); if($('b-ckall'))$('b-ckall').checked=v; }
+async function bDeleteChecked(){ const ids=[...document.querySelectorAll('.bck:checked')].map(x=>+x.value); if(!ids.length){ await uiAlert('선택된 글이 없습니다','삭제할 글의 체크박스를 선택하세요.'); return; } if(!(await uiConfirm(`${ids.length}개 글을 삭제할까요?`,'댓글도 함께 삭제되며 되돌릴 수 없습니다.','삭제',true)))return; await bapi('mdelete',{ids}); flash(`${ids.length}개 글 삭제됨`); renderBoard(); renderMain(); }
+function bAdminOff(){ try{ localStorage.setItem('luna-badmin','0'); }catch(e){} renderBoard(); flash('관리자 모드를 껐습니다'); }
 
 /* --- 글쓰기 / 수정 --- */
 function prepWrite(){
@@ -1192,14 +1268,78 @@ function prepWrite(){
  $('w-mode').textContent=p?'글 수정':'글쓰기'; $('w-h').innerHTML=p?'글 수정<small>수정 후에도 작성자는 \'익명\'으로 표시됩니다.</small>':'글쓰기<small>등록 후 작성자는 \'익명\'으로 표시됩니다.</small>'; $('w-submit').textContent=p?'수정 완료':'등록';
  if(p){ $('w-cat').value=p.cat; $('w-title').value=p.title; $('w-body').value=p.body; $('w-pw').value=p.pw||''; } else { $('w-cat').value='자유'; $('w-pw').value=''; }
 }
-function fill(){ $('w-title').value=TITLE; $('w-body').value=BODY; }
-function typeFill(){
- $('w-title').value=''; $('w-body').value='';
- let i=0; const t1=setInterval(()=>{ $('w-title').value=TITLE.slice(0,++i); if(i>=TITLE.length){clearInterval(t1); let j=0; const t2=setInterval(()=>{ $('w-body').value=BODY.slice(0,++j); if(j>=BODY.length)clearInterval(t2); },55);} },70);
+/* ===== 타이핑 엔진 ===== */
+const HL='ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+const VB={9:8,10:8,11:8,14:13,15:13,16:13,19:18};
+const TB={3:1,5:4,6:4,9:8,10:8,11:8,12:8,13:8,14:8,15:8,18:17};
+function strokes(ch){ // 한 글자를 입력 과정 단계로
+ const c=ch.charCodeAt(0);
+ if(!cfg.tjamo||c<0xAC00||c>0xD7A3) return [ch];
+ const s=c-0xAC00, L=Math.floor(s/588), V=Math.floor((s%588)/28), T=s%28, syl=(l,v,t=0)=>String.fromCharCode(0xAC00+l*588+v*28+t);
+ const out=[HL[L]]; if(VB[V]!=null) out.push(syl(L,VB[V])); out.push(syl(L,V));
+ if(T){ if(TB[T]!=null) out.push(syl(L,V,TB[T])); out.push(syl(L,V,T)); }
+ return out;
 }
+function stages(text){ const st=[]; let done=''; for(const ch of text){ for(const s of strokes(ch)) st.push(done+s); done+=ch; } return st; }
+function strokeDelay(prevCh){
+ const base=60000/Math.max(20,+cfg.tpm||120);
+ if(!cfg.tnat) return base;
+ let d=base*(0.55+Math.random()*0.9);
+ if(prevCh===' ') d+=base*(0.3+Math.random()*0.8);
+ if(/[.,!?…]/.test(prevCh||'')) d+=250+Math.random()*450;
+ if(prevCh==='\n') d+=500+Math.random()*700;
+ if(Math.random()<0.04) d+=350+Math.random()*700; // 가끔 머뭇거림
+ return d;
+}
+const TY={timer:null,run:0};
+function typeStop(){ const was=TY.timer!=null; TY.run++; clearTimeout(TY.timer); TY.timer=null; if(was&&document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)) document.activeElement.blur(); }
+function typeRun(jobs){ // jobs: [{el,text,after}]
+ typeStop(); const my=TY.run; let j=0, st=null, k=0;
+ const next=()=>{
+  if(my!==TY.run) return;
+  if(!st){ if(j>=jobs.length){ TY.timer=null; if(document.activeElement) document.activeElement.blur?.(); return; } const job=jobs[j]; job.el.value=''; job.el.focus(); st=stages(job.text); k=0; if(!st.length){ j++; st=null; return next(); } }
+  const job=jobs[j]; job.el.value=st[k]; job.el.scrollTop=job.el.scrollHeight; if(job.after) job.after();
+  const prev=st[k].slice(-1); k++;
+  if(k>=st.length){ j++; st=null; TY.timer=setTimeout(next, j<jobs.length?500+Math.random()*400:0); return; }
+  TY.timer=setTimeout(next, strokeDelay(prev));
+ };
+ next();
+}
+const typing=()=>TY.timer!=null;
+/* 고스트 타이핑: 아무 키나 누르면 대본이 한 타씩 */
+const GH={on:false,jobs:null,j:0,k:0,st:null};
+function ghostJobs(){
+ if($('v-write').classList.contains('on')) return [{el:$('w-title'),text:TITLE},{el:$('w-body'),text:BODY}];
+ if($('v-lf').classList.contains('on')) return [{el:$('lf-q'),text:cfg.lfnick}];
+ if($('v-se').classList.contains('on')) return [{el:$('se-q'),text:cfg.seq,after:()=>sugRender('se-q')}];
+ return null;
+}
+function ghostToggle(force){
+ const jobs=ghostJobs(); GH.on=force!=null?force:!GH.on; if(!jobs) GH.on=false;
+ $('ghostbadge').classList.toggle('on',GH.on);
+ if(GH.on){ typeStop(); GH.jobs=jobs; GH.j=0; GH.k=0; GH.st=null; jobs.forEach(x=>x.el.value=''); jobs[0].el.focus(); flash('고스트 타이핑 ON'); }
+ else { if(document.activeElement) document.activeElement.blur?.(); flash('고스트 타이핑 OFF'); }
+}
+function ghostStep(back){
+ const J=GH.jobs; if(!J) return;
+ if(back){ if(GH.st&&GH.k>1){ GH.k-=2; } else if(GH.st&&GH.k===1){ J[GH.j].el.value=''; GH.k=0; return; } else return; }
+ if(!GH.st){ if(GH.j>=J.length) return; GH.st=stages(J[GH.j].text); GH.k=0; J[GH.j].el.focus(); }
+ const job=J[GH.j]; job.el.value=GH.st[GH.k]; job.el.setSelectionRange?.(job.el.value.length,job.el.value.length); job.el.scrollTop=job.el.scrollHeight; if(job.after) job.after(); GH.k++;
+ if(GH.k>=GH.st.length){ GH.j++; GH.st=null; if(GH.j<J.length) setTimeout(()=>J[GH.j].el.focus(),0); }
+}
+document.addEventListener('keydown',e=>{
+ if(!GH.on) return; const el=e.target; if(!GH.jobs||!GH.jobs.some(x=>x.el===el)) return;
+ if(e.ctrlKey||e.metaKey||e.altKey) return;
+ if(e.key==='Escape'||e.key==='Tab'||e.key.startsWith('Arrow')||e.key==='Shift'||e.key==='CapsLock') return;
+ e.preventDefault(); e.stopPropagation();
+ if(e.key==='Backspace') ghostStep(true); else if(e.key==='Enter'&&GH.j>=GH.jobs.length){ if($('v-write').classList.contains('on')) submitPost(); else if($('v-lf').classList.contains('on')) lfSearch(); else seSearch(); ghostToggle(false); } else ghostStep(false);
+},true);
+['compositionstart','compositionupdate','compositionend','input'].forEach(t=>document.addEventListener(t,e=>{ if(!GH.on||!GH.jobs) return; const job=GH.jobs.find(x=>x.el===e.target); if(!job) return; const i=GH.jobs.indexOf(job); const want=i<GH.j?job.text:(i===GH.j&&GH.st&&GH.k>0?GH.st[GH.k-1]:''); if(job.el.value!==want){ job.el.value=want; } },true));
+function fill(){ typeStop(); $('w-title').value=TITLE; $('w-body').value=BODY; }
+function typeFill(){ if(typing()){ typeStop(); return; } typeRun([{el:$('w-title'),text:TITLE},{el:$('w-body'),text:BODY}]); }
 async function submitPost(){
  const t=$('w-title').value.trim(), b=$('w-body').value.trim(), cat=$('w-cat').value, pw=$('w-pw').value;
- if(!t||!b){ alert('제목과 내용을 입력하세요.'); return; }
+ if(!t||!b){ await uiAlert('제목과 내용을 입력하세요','빈 칸이 있으면 등록할 수 없습니다.'); return; }
  if(B.edit){ const id=B.edit; await bapi('update',{id,title:t,body:b,cat,pw}); B.edit=null; $('w-title').value=''; $('w-body').value=''; flash('수정되었습니다'); openPost(id); return; }
  const r=await bapi('create',{title:t,body:b,cat,pw,authorKey:B.uid});
  $('w-title').value=''; $('w-body').value=''; $('w-pw').value='';
@@ -1221,8 +1361,8 @@ async function flood(){
  step();
 }
 /* --- 관리 --- */
-async function bReseed(){ if(!confirm('게시판의 모든 글을 지우고 샘플 글을 다시 만들까요?'))return; await bapi('bulk',{posts:makeSeed(),replace:true}); flash('샘플 글 생성 완료'); renderMain(); if($('v-board').classList.contains('on'))renderBoard(); }
-async function bClear(){ if(!confirm('게시판의 모든 글을 삭제할까요?'))return; await bapi('clear'); B.cur=null; flash('게시판을 비웠습니다'); renderMain(); if($('v-board').classList.contains('on'))renderBoard(); }
+async function bReseed(){ if(!(await uiConfirm('샘플 글을 다시 만들까요?','게시판의 모든 글과 댓글을 지우고 샘플 글 32개 + 공지를 새로 만듭니다. 모든 PC에 반영됩니다.','다시 만들기',true)))return; await bapi('bulk',{posts:makeSeed(),replace:true}); flash('샘플 글 생성 완료'); renderMain(); if($('v-board').classList.contains('on'))renderBoard(); }
+async function bClear(){ if(!(await uiConfirm('게시판을 비울까요?','모든 글과 댓글이 삭제됩니다. 모든 PC에 반영됩니다.','비우기',true)))return; await bapi('clear'); B.cur=null; flash('게시판을 비웠습니다'); renderMain(); if($('v-board').classList.contains('on'))renderBoard(); }
 /* --- 실시간 동기화 --- */
 setInterval(async()=>{
  if(!ONLINE||B.offline||document.hidden) return;
@@ -1279,29 +1419,35 @@ function makeSeed(){
 function openPop(){ $('ov').classList.add('on'); }
 function closePop(){ $('ov').classList.remove('on'); }
 function toast(){ const t=$('toast'); t.classList.remove('on'); void t.offsetWidth; t.classList.add('on'); }
-function reset(){ B.cur=null; B.edit=null; flooding=false; $('w-title').value=''; $('w-body').value=''; $('lf-q').value=''; $('lf-searching').classList.remove('on'); $('se-q').value=''; $('se-q2').value=''; closePop(); $('toast').classList.remove('on'); go('main'); }
+function reset(){ typeStop(); B.cur=null; B.edit=null; B.cedit=null; flooding=false; $('w-title').value=''; $('w-body').value=''; $('lf-q').value=''; $('lf-searching').classList.remove('on'); $('se-q').value=''; $('se-q2').value=''; closePop(); $('toast').classList.remove('on'); go('main'); }
 
 document.addEventListener('keydown', e=>{
  const inField = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)||document.activeElement.isContentEditable;
  const writeOn = $('v-write').classList.contains('on');
  const lfOn = $('v-lf').classList.contains('on');
  const seOn = $('v-se').classList.contains('on');
- if(e.key==='Escape'){ closePop(); $('toast').classList.remove('on'); return; }
+ if(document.querySelector('.umodal')) return;
+ if(e.key==='Escape'){ if(typing()){ typeStop(); return; } if(GH.on){ ghostToggle(false); return; } closePop(); $('toast').classList.remove('on'); return; }
  if(writeOn && e.key==='Enter' && e.ctrlKey){ submitPost(); return; }
- if(inField) return;
+ const wasTyping=typing();
+ if(wasTyping){ e.preventDefault(); if(e.key==='t'||e.key==='T'||e.key==='ㅅ'){ typeStop(); return; } }
+ if(inField&&!wasTyping) return;
  const k=e.key.toLowerCase();
  if(k==='h') $('hint').classList.toggle('on');
  if(k==='s') togglePanel();
  if(k==='e'){ if(!ED.on){ try{ localStorage.setItem('luna-cfg-snap',JSON.stringify(cfg)); }catch(x){} } edToggle(); }
- if(k==='f'&&writeOn) fill();
- if(k==='t'&&writeOn) typeFill();
- if(k==='enter'&&writeOn) submitPost();
- if(k==='f'&&lfOn) lfFill();
- if(k==='t'&&lfOn) lfType();
- if(k==='enter'&&lfOn) lfSearch();
- if(k==='f'&&seOn) seFill();
- if(k==='t'&&seOn) seType();
- if(k==='enter'&&seOn) seSearch();
+ if((k==='g'||k==='ㅎ')&&(writeOn||lfOn||seOn)){ e.preventDefault(); ghostToggle(); return; }
+ if((k==='f'||k==='t'||k==='ㄹ'||k==='ㅅ'||k==='enter')&&(writeOn||lfOn||seOn)) e.preventDefault();
+ const K=k==='ㄹ'?'f':k==='ㅅ'?'t':k;
+ if(K==='f'&&writeOn) fill();
+ if(K==='t'&&writeOn) typeFill();
+ if(K==='enter'&&writeOn) submitPost();
+ if(K==='f'&&lfOn) lfFill();
+ if(K==='t'&&lfOn) lfType();
+ if(K==='enter'&&lfOn) lfSearch();
+ if(K==='f'&&seOn) seFill();
+ if(K==='t'&&seOn) seType();
+ if(K==='enter'&&seOn) seSearch();
  if(k==='c') { if($('v-post').classList.contains('on')) flood(); }
  if(k==='p') openPop();
  if(k==='m') toast();
