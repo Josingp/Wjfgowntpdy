@@ -1044,7 +1044,7 @@ document.addEventListener('click',e=>{
  if(e.target.matches('input[data-e]')){ e.preventDefault(); e.stopPropagation(); const v=prompt('안내 문구',e.target.placeholder); if(v!==null){ e.target.placeholder=v; cfg.ov=cfg.ov||{}; cfg.ov[e.target.dataset.e]=v; edDirty(); } return; }
  if(e.target.closest('[contenteditable="true"]')&&!e.target.closest('.edbar,.edpop,.panel')){ e.stopPropagation(); }
  const add=e.target.closest('[data-edadd]'); if(add){ e.preventDefault(); e.stopPropagation(); edPopOpen(add.dataset.edadd,-1,add); return; }
- const it=e.target.closest('[data-ed]'); if(it){ e.preventDefault(); e.stopPropagation(); const [k,i]=it.dataset.ed.split('|'); edPopOpen(k,+i,it); return; }
+ const it=e.target.closest('[data-ed]'); if(it){ e.preventDefault(); e.stopPropagation(); const [k,i]=it.dataset.ed.split('|'); if(k==='cmt'){ cmtPopOpen(+i,it); return; } edPopOpen(k,+i,it); return; }
  const pim=e.target.closest('[data-edimg]'); if(pim){ e.preventDefault(); e.stopPropagation(); const i=pim.dataset.edimg; if((cfg.sepphotos||{})[i]&&!confirm('사진을 바꿀까요? (취소를 누르면 사진을 지웁니다)')){ clearPeopleImg(i); return; } $('ed-file').onchange=function(){ pickPeopleImg(this,i); }; $('ed-file').click(); return; }
  if(e.target.id==='se-photo'){ e.preventDefault(); $('ed-file').onchange=function(){ pickImg(this,'sephoto'); setTimeout(()=>{ applyCfg(); edDirty(); },400); }; $('ed-file').click(); return; }
  if(e.target.closest('a,button,tr,li[onclick],.quick a,.tbl td')&&!e.target.closest('.edbar,.edpop,.panel')&&!e.target.isContentEditable){ /* 편집 중엔 링크 동작 유지 */ }
@@ -1140,6 +1140,7 @@ function localBoard(action,d){
  else if(action==='cdelete'){ const c=p.comments.find(c=>c.id==d.cid); if(c){c.deleted=true;c.body='';} }
  else if(action==='cupdate'){ const c=p.comments.find(c=>c.id==d.cid); if(c&&!c.deleted){c.body=d.body;c.edited=now;} }
  else if(action==='clike'){ const c=p.comments.find(c=>c.id==d.cid); if(c)c.likes=Math.max(0,(c.likes||0)+d.d); }
+ else if(action==='cset'){ const c=p.comments.find(c=>c.id==d.cid); if(c&&!c.deleted){ if(d.body!=null)c.body=d.body; if(d.likes!=null)c.likes=Math.max(0,+d.likes||0); if(d.nick!=null){ if(d.nick)c.nick=d.nick; else delete c.nick; } if(d.created>0)c.created=+d.created; } }
  save(); return {posts};
 }
 async function bapi(action,d={}){
@@ -1224,7 +1225,7 @@ function renderPost(){
  if(B.csort==='like') roots.sort((a,b)=>(b.likes||0)-(a.likes||0)||a.created-b.created); else if(B.csort==='new') roots.sort((a,b)=>b.created-a.created); else roots.sort((a,b)=>a.created-b.created);
  const best=live.filter(c=>(c.likes||0)>=3).sort((a,b)=>b.likes-a.likes).slice(0,2);
  const cHTML=(c,reply)=> c.deleted? `<li class="${reply?'reply':''}"><span class="dl">삭제된 댓글입니다.</span></li>` :
-  `<li class="${reply?'reply':''}"><span class="who ${nm[c.authorKey]==='글쓴이'?'op':''} ${c.authorKey===B.uid?'me':''}">${nm[c.authorKey]||'익명'}</span>${B.cedit===c.id?`<div class="cedit"><input id="c-edit" value="${esc(c.body)}" onkeydown="if(event.key==='Enter')bCSave(${c.id});if(event.key==='Escape'){B.cedit=null;renderPost()}"><button onclick="bCSave(${c.id})">저장</button><button class="x" onclick="B.cedit=null;renderPost()">취소</button></div>`:`${nl(c.body)}${c.edited?'<span class="ed">(수정됨)</span>':''}<span class="when">${ago(c.created)}</span><span class="acts">${reply?'':`<a onclick="bReplyBox(${c.id})">답글</a>`}${canEditC(c)?`<a onclick="bCEdit(${c.id})">수정</a><a onclick="bCDelete(${c.id})">삭제</a>`:''}</span>`}<span class="lk ${clk[c.id]?'on':''}" onclick="bCLike(${c.id})">👍 ${c.likes||0}</span></li>`
+  `<li class="${reply?'reply':''}" ${B.cedit===c.id?'':`data-ed="cmt|${c.id}"`}><span class="who ${nm[c.authorKey]==='글쓴이'?'op':''} ${c.authorKey===B.uid?'me':''}">${esc(c.nick||nm[c.authorKey]||'익명')}</span>${B.cedit===c.id?`<div class="cedit"><input id="c-edit" value="${esc(c.body)}" onkeydown="if(event.key==='Enter')bCSave(${c.id});if(event.key==='Escape'){B.cedit=null;renderPost()}"><button onclick="bCSave(${c.id})">저장</button><button class="x" onclick="B.cedit=null;renderPost()">취소</button></div>`:`${nl(c.body)}${c.edited?'<span class="ed">(수정됨)</span>':''}<span class="when">${ago(c.created)}</span><span class="acts">${reply?'':`<a onclick="bReplyBox(${c.id})">답글</a>`}${canEditC(c)?`<a onclick="bCEdit(${c.id})">수정</a><a onclick="bCDelete(${c.id})">삭제</a>`:''}</span>`}<span class="lk ${clk[c.id]?'on':''}" onclick="bCLike(${c.id})">👍 ${c.likes||0}</span></li>`
   +(B.reply===c.id?`<div class="rin"><input id="c-reply" placeholder="답글을 남겨주세요. (익명)" onkeydown="if(event.key==='Enter')bComment(${c.id})"><button onclick="bComment(${c.id})">등록</button><button class="x" onclick="B.reply=null;renderPost()">취소</button></div>`:'');
  box.innerHTML=`
   <div class="ph">${!p.notice||isAdmin()?`<div class="own"><a onclick="bEdit()">수정</a><a class="del" onclick="bDelete()">삭제</a>${p.notice?'':'<a onclick="flash(\'신고가 접수되었습니다\')">신고</a>'}</div>`:''}
@@ -1233,7 +1234,7 @@ function renderPost(){
   <div class="pb">${nl(p.body)}</div>
   <div class="like"><button class="${my===1?'hot':''}" onclick="bLike(1)">👍 추천 <b>${p.likes}</b></button><button class="dn ${my===-1?'hot':''}" onclick="bLike(-1)">👎 비추천 <b>${p.dislikes||0}</b></button><button onclick="flash('스크랩되었습니다')">🔖 스크랩</button><button onclick="flash('신고가 접수되었습니다')">⚠ 신고</button></div>
   <div class="cm"><div class="top"><h4>댓글 <b>${live.length}</b></h4><div class="csort"><a class="${B.csort==='new'?'cur':''}" onclick="B.csort='new';renderPost()">최신순</a><a class="${B.csort==='old'?'cur':''}" onclick="B.csort='old';renderPost()">등록순</a><a class="${B.csort==='like'?'cur':''}" onclick="B.csort='like';renderPost()">추천순</a></div></div>
-   ${best.length?`<div class="best-h">BEST 댓글</div><ul style="margin-bottom:12px">${best.map(c=>`<li class="best"><span class="bb">BEST</span><span class="who ${nm[c.authorKey]==='글쓴이'?'op':''}">${nm[c.authorKey]||'익명'}</span>${nl(c.body)}<span class="when">${ago(c.created)}</span><span class="lk on">👍 ${c.likes}</span></li>`).join('')}</ul>`:''}
+   ${best.length?`<div class="best-h">BEST 댓글</div><ul style="margin-bottom:12px">${best.map(c=>`<li class="best" data-ed="cmt|${c.id}"><span class="bb">BEST</span><span class="who ${nm[c.authorKey]==='글쓴이'?'op':''}">${esc(c.nick||nm[c.authorKey]||'익명')}</span>${nl(c.body)}<span class="when">${ago(c.created)}</span><span class="lk on">👍 ${c.likes}</span></li>`).join('')}</ul>`:''}
    <ul id="p-cm">${roots.map(c=>cHTML(c,false)+byParent(c.id).map(r=>cHTML(r,true)).join('')).join('')||'<li style="color:#aaa;text-align:center">첫 댓글을 남겨보세요.</li>'}</ul>
    <div class="in" style="margin-top:14px"><input id="c-in" placeholder="댓글을 남겨주세요. (익명)" onkeydown="if(event.key==='Enter')bComment()"><button onclick="bComment()">등록</button></div>
   </div>`;
@@ -1256,6 +1257,34 @@ function bReplyBox(cid){ B.reply=B.reply===cid?null:cid; renderPost(); }
 async function bCDelete(cid){ const c=post()?.comments.find(x=>x.id===cid); if(!c||!(await bAuthC(c)))return; if(!(await uiConfirm('댓글을 삭제할까요?','삭제한 댓글은 "삭제된 댓글입니다"로 표시됩니다.','삭제',true)))return; await bapi('cdelete',{id:B.cur,cid}); flash('댓글이 삭제되었습니다'); renderPost(); renderMain(); }
 async function bCEdit(cid){ const c=post()?.comments.find(x=>x.id===cid); if(!c||!(await bAuthC(c)))return; B.cedit=cid; B.reply=null; renderPost(); }
 async function bCSave(cid){ const v=($('c-edit')?.value||'').trim(); if(!v){ $('c-edit')?.focus(); return; } await bapi('cupdate',{id:B.cur,cid,body:v}); B.cedit=null; flash('댓글이 수정되었습니다'); renderPost(); }
+/* --- 편집 모드: 댓글(BEST 포함) 화면 내 수정 --- */
+function cmtPopOpen(cid,anchor){
+ const p=post(); const c=p?.comments.find(x=>x.id===cid); if(!c||c.deleted)return; const nm=names(p);
+ const mins=Math.max(0,Math.round((Date.now()-c.created)/60000));
+ edPopClose(); const pop=document.createElement('div'); pop.className='edpop'; pop.id='edpop'; pop.dataset.mins=mins;
+ pop.innerHTML=`<div class="eph">댓글 수정${anchor.classList.contains('best')?' (BEST)':''}<button onclick="edPopClose()">×</button></div>
+  <label><span>닉네임</span><input data-k="nick" value="${esc(c.nick||nm[c.authorKey]||'익명')}"></label>
+  <label><span>내용</span><textarea data-k="body" rows="3">${esc(c.body)}</textarea></label>
+  <div style="display:flex;gap:8px"><label style="flex:1"><span>추천 수</span><input data-k="likes" type="number" min="0" value="${c.likes||0}"></label><label style="flex:1"><span>작성 시각 (몇 분 전 · 0=방금 전)</span><input data-k="mins" type="number" min="0" value="${mins}"></label></div>
+  <div style="font-size:11.5px;color:#888;margin-top:4px">추천 3 이상인 댓글 중 상위 2개가 BEST로 올라갑니다.</div>
+  <div class="epf"><button class="btn gh" onclick="edPopClose()">취소</button><button class="btn" onclick="cmtPopSave(${cid})">적용</button></div>`;
+ pop.addEventListener('keydown',e=>{ if(e.key==='Escape'){ e.preventDefault(); edPopClose(); } else if(e.key==='Enter'&&!e.shiftKey&&e.target.tagName==='INPUT'){ e.preventDefault(); cmtPopSave(cid); } });
+ document.body.appendChild(pop); const r=anchor.getBoundingClientRect(); const w=380,h=pop.offsetHeight; let x=Math.min(r.left,innerWidth-w-16), y=r.bottom+8; if(y+h>innerHeight-10) y=Math.max(10,r.top-h-8); pop.style.left=Math.max(8,x)+'px'; pop.style.top=y+'px';
+ const t=pop.querySelector('textarea'); t.focus(); t.setSelectionRange(t.value.length,t.value.length);
+}
+async function cmtPopSave(cid){
+ const pop=$('edpop'); if(!pop)return; const v=k=>pop.querySelector(`[data-k="${k}"]`).value;
+ const p=post(); const c=p?.comments.find(x=>x.id===cid); if(!c)return;
+ const body=v('body').trim(); if(!body){ pop.querySelector('[data-k="body"]').focus(); return; }
+ const likes=Math.max(0,parseInt(v('likes'),10)||0);
+ const def=names(p)[c.authorKey]||'익명'; const nick=v('nick').trim();
+ const d={id:B.cur,cid,body,likes,nick:(nick&&nick!==def)?nick:''};
+ const mins=Math.max(0,parseInt(v('mins'),10)||0); if(mins!==+pop.dataset.mins) d.created=Date.now()-mins*60000;
+ /* 폭주 댓글에서 온 댓글이면 설정의 폭주 댓글 문구·추천 수도 같이 바꿔서 다음 연출에도 반영 */
+ if(String(c.authorKey).startsWith('f')){ const name=c.authorKey.slice(1); const L=(cfg.comments||'').split('\n'); const j=L.findIndex(l=>l.split('|')[0].trim()===name);
+  if(j>=0){ L[j]=[name,body.replace(/\|/g,'ǀ').replace(/\s*\n\s*/g,' '),likes].join('|'); cfg.comments=L.join('\n'); applyCfg(); edDirty(); } }
+ edPopClose(); await bapi('cset',d); renderPost(); flash('댓글이 수정되었습니다');
+}
 async function bCLike(cid){ const lk=liked(); const k='c'+B.cur; lk[k]=lk[k]||{}; const on=!!lk[k][cid]; if(on) delete lk[k][cid]; else lk[k][cid]=1; setLiked(lk); await bapi('clike',{id:B.cur,cid,d:on?-1:1}); renderPost(); }
 async function bEdit(){ const p=post(); if(!p||!(await bAuth(p)))return; B.edit=p.id; go('write','edit'); }
 async function bDelete(){ const p=post(); if(!p||!(await bAuth(p)))return; if(!(await uiConfirm('글을 삭제할까요?','댓글도 함께 삭제되며 되돌릴 수 없습니다.','삭제',true)))return; await bapi('delete',{id:p.id}); B.cur=null; flash('삭제되었습니다'); go('board'); renderMain(); }

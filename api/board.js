@@ -63,6 +63,15 @@ export default async function handler(req, res) {
   else if (a === "cdelete") { const c = p.comments.find(c => c.id === Number(b.cid)); if (c) { c.deleted = true; c.body = ""; } }
   else if (a === "cupdate") { const c = p.comments.find(c => c.id === Number(b.cid)); if (c && !c.deleted) { c.body = clean(b.body); c.edited = now; } }
   else if (a === "clike") { const c = p.comments.find(c => c.id === Number(b.cid)); if (c) c.likes = Math.max(0, (c.likes || 0) + (Number(b.d) || 0)); }
+  else if (a === "cset") {
+    const c = p.comments.find(c => c.id === Number(b.cid));
+    if (c && !c.deleted) {
+      if (b.body != null) c.body = clean(b.body);
+      if (b.likes != null) c.likes = Math.max(0, Number(b.likes) || 0);
+      if (b.nick != null) { const n = clean(b.nick).slice(0, 40); if (n) c.nick = n; else delete c.nick; }
+      if (Number(b.created) > 0) c.created = Number(b.created);
+    }
+  }
   else return json(res, 400, { error: "bad action" });
 
   await put(p);
